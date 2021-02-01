@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html theme="dark" lang="en">
+  <head>
+    <title>Will-Do</title>
+    <meta name="keywords" content="to-do, task manager, planner">
+    <meta name="description" content="An all new task manager for your daily life.">
+    <meta name="theme-color" content="#121212">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" 
+          href="/dist/assets/images/logos/thatblindgeye-favicon.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style-prefixed.css">
+  </head>
+  <body>
+    <div class="modal-container">
+      <div class="warning-modal">
+        <p>This site uses animation effects. If you suffer from a vesibular disorder or otherwise prefer to have no animations, you can turn them off by clicking the first button below. You can later change this setting in the Display & Accessibility tab at the top of the page.</p>
+        <button type="button">Disable Animations</button>
+        <button type="button">Continue with Animations</button>
+      </div>
+    </div>
+    <header>
+      <div id="accessibility-container" class="animated focusable" tabindex="0">
+        <div id="accessibility-contents">
+          <a href="#main" id="skip-link" class="focusable">Skip to main content</a>
+          <div id="theme-switch" class="animated focusable" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle Light theme">
+          </div>
+          <div id="animation-switch" role="switch focusable" aria-checked="true" tabindex="0" aria-label="Toggle animations">
+          </div>
+        </div>
+        <div id="accessibility-label">
+          Display & Accessibility 
+          <div class="label-arrow-container">
+            <div class="label-arrow label-arrow-left animated"></div>
+            <div class="label-arrow label-arrow-right animated"></div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-button focusable" tabindex="0"></div>
+      <nav id="main-nav" aria-role="button" aria-label="Open menu" tabindex="0">
+        <div class="default-groups-container groups-container">
+          <div class="close-button animated focusable" aria-role="button" aria-label="Close menu" tabindex="0"></div>
+          <button class="focusable">Important</button>
+          <button class="focusable">This Week</button>
+          <button class="focusable">Later</button>
+          <button class="focusable">Eventually</button>
+        </div>
+        <div class="custom-groups-container groups-container">
+          <button class="focusable">Important</button>
+          <button class="focusable">This Week</button>
+          <button class="focusable">Later</button>
+          <button class="focusable">Eventually</button>
+        </div>
+          <!-- Have two sections of groups, default and user created:
+          Default: "this week, later, eventually"; in the task-container area, show the title of the tasks that are due and their due date, and when you click the task it expands to show its details.
+
+          User Created: dynamically made; have the title of the group as well as the title of tasks under the group. When a task is clicked  -->
+      </nav>
+    </header>
+    <div id="main">
+      <div class="task-container">
+        <h1>Vacation in Rome Part 1</h1>
+        Main content.
+      </div>
+    </div>
+
+    <footer>
+      <nav id="lower-nav"></nav>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>
