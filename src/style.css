@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 :root {
+  background-color: var(--background-menu);
   scroll-behavior: smooth;
   /* text */
     --text-black-high: rgba(0, 0, 0, 0.87);
@@ -26,6 +27,7 @@
     --background-access-bar: rgb(61, 60, 50);
     --background-main-nav: rgb(30, 30, 30);
     --background-menu: rgb(39, 39, 39);
+    --background-menu-hover: rgb(51, 51, 51);
     --background-modal: rgb(54, 54, 54);
   /* elevation refs */
     --elevation-00dp: rgb(18, 18, 18); /* text btn, top app bar (rest), */
@@ -66,6 +68,7 @@
     --background-access-bar: rgb(241, 239, 215);
     --background-main-nav: rgb(240, 240, 240);
     --background-menu: rgb(240, 240, 240);
+    --background-menu-hover: rgb(220, 220, 220);
     --background-modal: rgb(220, 220, 220);
   /* text */
     --primary-text: rgb(0, 0, 0, 0.87);
@@ -90,7 +93,7 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   background: var(--background-base);
 }
 
@@ -104,6 +107,10 @@ button:hover {
 
 .focusable:focus {
   outline: var(--focus);
+}
+
+.active {
+  visibility: hidden;
 }
 
 
@@ -127,6 +134,7 @@ button:hover {
   align-items: center;
   width: 90vw;
   max-width: 500px;
+  max-height: 75vh;
   padding: 25px;
   border-radius: 15px;
   background-color: var(--background-modal);
@@ -134,6 +142,8 @@ button:hover {
   box-shadow: 0 0 10px 2px black;
   font-size: 1.1rem;
   line-height: 1.25;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .warning-modal h1 {
@@ -141,13 +151,16 @@ button:hover {
   font-size: 1.5rem;
 }
 
+.warning-modal button {
+  padding: 10px 15px;
+}
+
 .warning-modal button:hover {
   cursor: pointer;
 }
 
-.warning-modal button {
-  width: 60%;
-  padding: 5px;
+.warning-modal button:focus {
+  opacity: 0.8;
 }
 
 .warning-modal button:first-of-type {
@@ -174,8 +187,6 @@ button:hover {
   top: -8.25rem;
   background-color: var(--background-access-bar);
   color: var(--primary-text);
-  transition: top 0.5s ease-in-out;
-  /* overflow: hidden; */
 }
 
 #accessibility-container:focus-within,
@@ -234,6 +245,11 @@ button:hover {
   cursor: pointer;
 }
 
+#theme-switch:focus,
+#animation-switch:focus {
+  transform: scale(1.05);
+}
+
 #accessibility-label {
   z-index: 2;
   display: flex;
@@ -290,7 +306,7 @@ button:hover {
 /* ========== MAIN NAV ========== */
 .menu-button {
   position: absolute;
-  top: 2.5rem;
+  top: 3rem;
   left: 5px;
   width: 40px;
   height: 40px;
@@ -317,6 +333,12 @@ button:hover {
   font-size: 1.25rem;
   text-align: right;
   font-weight: bold;
+  opacity: 0.8;
+}
+
+.add-task-button:hover, 
+.add-task-button:focus {
+  opacity: 1;
 }
 
 .add-task-button span {
@@ -377,12 +399,27 @@ button:hover {
   text-align: left;
 }
 
-.groups-container button:hover {
-  background-color: black;
+.groups-container button:hover,
+.groups-container button:focus {
+  background-color: var(--background-menu-hover);
 }
 
 .default-groups-container {
   margin: 35px 0 25px;
+}
+
+.custom-groups-container {
+  padding-bottom: 1rem;
+}
+
+.custom-groups-container .add-group-button {
+  padding: 10px 5px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.custom-groups-container .material-icons {
+  vertical-align: middle;
 }
 
 
@@ -396,8 +433,10 @@ button:hover {
 }
 
 .task-container {
-  width: 100%;
-  padding: 20px;
+  width: 95%;
+  height: 95%;
+  margin-bottom: 10px;
+  padding: 15px 5px;
 }
 
 
@@ -407,7 +446,6 @@ button:hover {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100px;
   padding: 10px 0;
   bottom: 0;
   left: 0;
@@ -429,43 +467,38 @@ button:hover {
   text-decoration: underline;
 }
 
+#lower-nav a:last-of-type {
+  opacity: 0.7;
+}
+
+#lower-nav a:last-of-type:hover,
+#lower-nav a:last-of-type:focus {
+  opacity: 1;
+}
+
 /* ========== MEDIA QUERIES ========== */
 @media only screen and (min-width: 430px) {
+  #accessibility-contents {
+    justify-content: space-around;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    background-color: var(--background-base);
+  }
+
   #accessibility-container {
     top: -3.75rem;
   }
 
   #accessibility-contents {
-    justify-content: space-around;
+    justify-content: flex-start;
     height: 3.75rem;
   }
 
   #accessibility-contents > * {
-    margin: 0;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  /* :root {
-    height: 100vh;
-  }
-
-  body {
-    height: 100vh;
-    max-height: 100vh;
-  } */
-
-  #accessibility-contents {
-    justify-content: flex-start;
-  }
-
-  #accessibility-contents > * {
-    margin-right: 50px;
-  }
-
-  #accessibility-label {
-    position: fixed;
-    width: 100%;
+    margin-right: 25px;
   }
 
   .menu-button,
@@ -474,25 +507,29 @@ button:hover {
   }
 
   .add-task-button {
+    z-index: 1;
     position: fixed;
+    left: 10px;
   }
 
   #main-nav {
     position: fixed;
     width: 300px;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 97px);
     margin-top: 0;
   }
 
   .default-groups-container {
-    margin: 50px 0 25px;
+    margin: 6rem 0 25px;
   }
 
   #main {
-    height: 100vh;
-    margin: 2rem 0 40px 300px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    justify-content: center;
+    margin: 3rem 0 0 300px;
+  }
+
+  .task-container {
+    width: 80%;
   }
 
   #lower-nav {
@@ -502,7 +539,18 @@ button:hover {
 }
 
 /* @media only screen and (min-width: 992px) {
+  .add-task-button {
+    right: 30px;
+  }
 
+  #main {
+    justify-content: flex-start;
+    margin: 3rem 0 0 325px;
+  }
+
+  .task-container {
+    width: 80%;
+  }
 }
 
 @media only screen and (min-width: 1200px) {

@@ -7,6 +7,16 @@ const menu = (() => {
   const menuOpen = document.querySelector(".menu-button");
   const menuClose = document.querySelector(".menu-close-button");
   
+  const _menuVisibility = () => {
+    if (document.documentElement.scrollWidth > 767) {
+      DOM.menu.style.visibility = "visible";
+      DOM.menu.style.left = "0";
+    } else {
+      DOM.menu.style.visibility = "hidden";
+      DOM.menu.style.left = "-800px";
+    };
+  };
+
   menuOpen.addEventListener("click", () => {
     DOM.menu.style.visibility = "visible";
     DOM.menu.style.left = "0";
@@ -21,13 +31,7 @@ const menu = (() => {
     menuOpen.focus();
   });
 
-  window.addEventListener("resize", () => {
-    if (document.documentElement.scrollWidth > 767) {
-      DOM.menu.style.visibility = "visible";
-      DOM.menu.style.left = "0";
-    } else {
-      DOM.menu.style.visibility = "hidden";
-      DOM.menu.style.left = "-800px";
-    }
-  });
+  window.addEventListener("resize", _menuVisibility);
+
+  window.addEventListener("load", _menuVisibility);
 })();
