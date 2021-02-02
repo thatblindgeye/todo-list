@@ -24,7 +24,7 @@
   /* backgrounds */
     --background-base: rgb(18, 18, 18);
     --background-access-bar: rgb(61, 60, 50);
-    --background-main-nav: rgb(30, 30, 30);
+    --background-todo-hover: rgb(46, 46, 46);
     --background-menu: rgb(39, 39, 39);
     --background-menu-hover: rgb(51, 51, 51);
     --background-modal: rgb(54, 54, 54);
@@ -65,7 +65,7 @@
   /* backgrounds */
     --background-base: rgb(240, 240, 240);
     --background-access-bar: rgb(241, 239, 215);
-    --background-main-nav: rgb(240, 240, 240);
+    --background-todo-hover: rgb(220, 220, 220);
     --background-menu: rgb(240, 240, 240);
     --background-menu-hover: rgb(220, 220, 220);
     --background-modal: rgb(220, 220, 220);
@@ -94,10 +94,6 @@
 body {
   min-height: 100vh;
   background: var(--background-base);
-}
-
-header {
-  background-color: var(--background-main-nav);
 }
 
 button:hover {
@@ -510,6 +506,45 @@ button:hover {
   padding: 15px 5px;
 }
 
+.selected-group {
+  margin-bottom: 25px;
+}
+
+.todo-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+  margin: 10px 0;
+  padding: 5px 5px 5px 1.5rem;
+  /* opacity: var(--inactive); */
+}
+
+.todo-item:hover,
+.todo-item:focus-within {
+  background-color: var(--background-todo-hover);
+}
+
+.todo-name input {
+  margin-right: 10px;
+}
+
+.todo-priority {
+  position: absolute;
+  color: var(--error);
+  font-size: 1.5rem;
+  left: 5px;
+}
+
 
 /* ========== LOWER NAV ========== */
 #lower-nav {
@@ -616,7 +651,7 @@ button:hover {
     -webkit-justify-content: center;
         -ms-flex-pack: center;
             justify-content: center;
-    margin: 3rem 0 0 300px;
+    margin: 2.1rem 0 0 300px;
   }
 
   .task-container {
@@ -629,24 +664,25 @@ button:hover {
   }
 }
 
-/* @media only screen and (min-width: 992px) {
-  .add-task-button {
-    right: 30px;
-  }
-
-  #main {
-    justify-content: flex-start;
-    margin: 3rem 0 0 325px;
-  }
-
-  .task-container {
-    width: 80%;
-  }
+@media only screen and (min-width: 992px) {
+  /* .task-container {
+    width: 50%;
+  } */
 }
 
 @media only screen and (min-width: 1200px) {
+  #main {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    margin: 2.1rem 0 0 325px;
+  }
 
-} */
+  .task-container {
+    width: 50%;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   :root {
