@@ -1,15 +1,26 @@
 "use strict";
 
-const header = (() => {
+const DOM = (() => {
   const accessibilityContainer = 
-      document.querySelector("#accessibility-container");
+        document.querySelector("#accessibility-container");
   const animationSwitch = 
-      document.querySelector("#animation-switch");
+        document.querySelector("#animation-switch");
+  const githubLogo = document.querySelector("#lower-nav img");
+  const menu = document.querySelector("#main-nav");
+  const modal = document.querySelector(".modal-container");
+  const modalDisableButton = document.querySelector(".disable-button");
+  const modalContinueButton = document.querySelector(".continue-button");
   const themeSwitch = document.querySelector("#theme-switch");
+
 
   return {
     accessibilityContainer,
     animationSwitch,
+    githubLogo,
+    menu,
+    modal,
+    modalContinueButton,
+    modalDisableButton,
     themeSwitch
   }
 })();
@@ -20,7 +31,7 @@ const siteStorage = (() => {
       "theme", document.documentElement.getAttribute("theme"));
 
     localStorage.setItem("animations-enabled", 
-        header.animationSwitch.getAttribute("aria-checked"));
+        DOM.animationSwitch.getAttribute("aria-checked"));
   };
 
   return {
@@ -47,19 +58,23 @@ const displayOptions = (() => {
   };
 
   const _darkTheme = () => {
-    header.themeSwitch.setAttribute("aria-checked", "false");
+    DOM.themeSwitch.setAttribute("aria-checked", "false");
     document.documentElement.setAttribute("theme", "dark");
-    header.themeSwitch.style.backgroundPosition = "center bottom -0.8rem";
+    DOM.themeSwitch.style.backgroundPosition = "center bottom -0.8rem";
+    DOM.githubLogo.setAttribute("src",
+        "assets/images/logos/GitHub-Mark-Light-32px.png");
   };
 
   const _lightTheme = () => {
-    header.themeSwitch.setAttribute("aria-checked", "true");
+    DOM.themeSwitch.setAttribute("aria-checked", "true");
     document.documentElement.setAttribute("theme", "light");
-    header.themeSwitch.style.backgroundPosition = "center top 2px";
+    DOM.themeSwitch.style.backgroundPosition = "center top 2px";
+    DOM.githubLogo.setAttribute("src",
+    "assets/images/logos/GitHub-Mark-32px.png");
   };
 
-  header.themeSwitch.addEventListener("click", _toggleTheme);
-  header.themeSwitch.addEventListener("keydown", (e) => {
+  DOM.themeSwitch.addEventListener("click", _toggleTheme);
+  DOM.themeSwitch.addEventListener("keydown", (e) => {
     if (e.key === " ") {
       e.preventDefault();
       _toggleTheme();
@@ -71,6 +86,9 @@ const displayOptions = (() => {
 
 const accessibilityOptions = (() => {
   const _onLoad = () => {
+    if (localStorage.length > 0) {
+      DOM.modal.style.display = "none";
+    };
     if (localStorage.getItem("animations-enabled") === "false") {
       _animationsDisabled();
     } else {
@@ -79,7 +97,7 @@ const accessibilityOptions = (() => {
   };
 
   const _toggleAnimations = () => {
-    if (header.animationSwitch.getAttribute("aria-checked") === "true") {
+    if (DOM.animationSwitch.getAttribute("aria-checked") === "true") {
       _animationsDisabled();
     } else {
       _animationsEnabled();
@@ -89,10 +107,11 @@ const accessibilityOptions = (() => {
 
   const _animationsEnabled = () => {
     document.documentElement.style.scrollBehavior = "smooth";
-    header.accessibilityContainer.style.transition = "top 0.75s ease-in-out";
-    header.animationSwitch.setAttribute("aria-checked", "true")
-    header.animationSwitch.textContent = "Animations Enabled";
-    header.themeSwitch.style.transition = "background-position 0.3s ease-in";
+    DOM.accessibilityContainer.style.transition = "top 0.75s ease-in-out";
+    DOM.animationSwitch.setAttribute("aria-checked", "true")
+    DOM.animationSwitch.textContent = "Animations Enabled";
+    DOM.themeSwitch.style.transition = "background-position 0.3s ease-in";
+    DOM.menu.style.transition = "left 0.5s";
     Array.from(document.querySelectorAll(".label-arrow")).forEach(item => {
       item.style.transition = "transform 0.75s";
     });
@@ -100,15 +119,27 @@ const accessibilityOptions = (() => {
         
   const _animationsDisabled = () => {
     document.documentElement.style.scrollBehavior = "unset";
-    header.animationSwitch.setAttribute("aria-checked", "false")
-    header.animationSwitch.textContent = "Animations Disabled";
+    DOM.animationSwitch.setAttribute("aria-checked", "false")
+    DOM.animationSwitch.textContent = "Animations Disabled";
     Array.from(document.querySelectorAll(".animated")).forEach(item => {
       item.style.transition = "none";
     });
   };
 
-  header.animationSwitch.addEventListener("click", _toggleAnimations);
-  header.animationSwitch.addEventListener("keydown", (e) => {
+  DOM.modalDisableButton.addEventListener("click", () => {
+    _animationsDisabled();
+    siteStorage.saveToLocal();
+    DOM.modal.style.display = "none";
+  });
+
+  DOM.modalContinueButton.addEventListener("click", () => {
+    _animationsEnabled();
+    siteStorage.saveToLocal();
+    DOM.modal.style.display = "none";
+  });
+
+  DOM.animationSwitch.addEventListener("click", _toggleAnimations);
+  DOM.animationSwitch.addEventListener("keydown", (e) => {
     if (e.key === " ") {
       e.preventDefault();
       _toggleAnimations();
@@ -118,4 +149,4 @@ const accessibilityOptions = (() => {
   window.addEventListener("load", _onLoad);
 })();
 
-export {siteStorage, displayOptions, accessibilityOptions}
+export {DOM, siteStorage, displayOptions, accessibilityOptions}

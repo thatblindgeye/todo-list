@@ -1,5 +1,4 @@
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
-@import url(https://fonts.googleapis.com/css?family=Sofia);
 :root {
   scroll-behavior: smooth;
   /* text */
@@ -23,8 +22,10 @@
     --color-secondary-var: ; /* 50-200 tonal range */
   /* backgrounds */
     --background-base: rgb(18, 18, 18);
-    --background-brand: rgb(61, 60, 50);
-    --background-main-nav: rgb(39, 39, 39);
+    --background-access-bar: rgb(61, 60, 50);
+    --background-main-nav: rgb(30, 30, 30);
+    --background-menu: rgb(39, 39, 39);
+    --background-modal: rgb(54, 54, 54);
   /* elevation refs */
     --elevation-00dp: rgb(18, 18, 18); /* text btn, top app bar (rest), */
     --elevation-01dp: rgb(30, 30, 30); /* searchbar (rest), card (rest), switch */
@@ -50,6 +51,7 @@
     --theme-toggle-icon: url(assets/images/icons/wb_sunny-white-24dp.svg);
     --close-button: url(assets/images/icons/close-white-24dp.svg);
     --menu-button: url(assets/images/icons/menu-white-24dp.svg);
+    --add-task-button: url(assets/images/icons/add-white-24dp.svg)
 }
 
 :root[theme="light"] {
@@ -60,8 +62,10 @@
     --color-secondary-var: ; /* +/- 200 of primary */
   /* backgrounds */
     --background-base: rgb(240, 240, 240);
-    --background-brand: rgb(241, 239, 215);
-    --background-main-nav: transparent;
+    --background-access-bar: rgb(241, 239, 215);
+    --background-main-nav: rgb(240, 240, 240);
+    --background-menu: rgb(240, 240, 240);
+    --background-modal: rgb(220, 220, 220);
   /* text */
     --primary-text: rgb(0, 0, 0, 0.87);
   /* borders */
@@ -76,6 +80,7 @@
     --theme-toggle-icon: url(assets/images/icons/wb_sunny-black-24dp.svg);
     --close-button: url(assets/images/icons/close-black-24dp.svg);
     --menu-button: url(assets/images/icons/menu-black-24dp.svg);
+    --add-task-button: url(assets/images/icons/add-black-24dp.svg)
 }
 
 * {
@@ -84,7 +89,12 @@
 }
 
 body {
+  height: 100vh;
   background: var(--background-base);
+}
+
+header {
+  background-color: var(--background-main-nav);
 }
 
 button:hover {
@@ -98,7 +108,11 @@ button:hover {
 
 /* ========== MODALS ========== */
 .modal-container {
-  display: none;
+  z-index: 3;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
@@ -116,23 +130,58 @@ button:hover {
 }
 
 .warning-modal {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 90vw;
   max-width: 500px;
   padding: 25px;
-  background-color:rgb(176, 0, 0);
   border-radius: 15px;
+  background-color: var(--background-modal);
+  color: var(--primary-text);
+  box-shadow: 0 0 10px 2px black;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.warning-modal h1 {
+  -webkit-align-self: flex-start;
+      -ms-flex-item-align: start;
+          align-self: flex-start;
+  font-size: 1.5rem;
 }
 
 .warning-modal button:hover {
   cursor: pointer;
 }
 
+.warning-modal button {
+  width: 60%;
+  padding: 5px;
+}
+
 .warning-modal button:first-of-type {
-  margin: 15px 0 30px;
+  margin: 15px 0 20px;
+  background-color: var(--color-primary);
+  color: var(--text-black-high);
+  border: 2px outset black;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 .warning-modal button:last-of-type {
   background-color: transparent;
+  color: var(--primary-text);
   border: none;
 }
 
@@ -143,21 +192,17 @@ button:hover {
   position: absolute;
   width: 100%;
   top: -8.25rem;
-  background-color: var(--background-brand);
+  background-color: var(--background-access-bar);
   color: var(--primary-text);
   -webkit-transition: top 0.5s ease-in-out;
   transition: top 0.5s ease-in-out;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #accessibility-container:focus-within,
 #accessibility-container:hover {
   top: 0;
 }
-
-/* #accessibility-container:focus {
-  outline: var(--focus);
-} */
 
 #accessibility-contents {
   display: -webkit-box;
@@ -190,6 +235,10 @@ button:hover {
   color: var(--primary-text);
 }
 
+#skip-link:hover {
+  text-decoration: underline;
+}
+
 #theme-switch {
   width: 2rem;
   height: 2.75rem;
@@ -217,14 +266,8 @@ button:hover {
   cursor: pointer;
 }
 
-/* #theme-switch:focus,
-#animation-switch:focus,
-#skip-link:focus {
-  outline: var(--focus);
-} */
-
 #accessibility-label {
-  z-index: 1;
+  z-index: 2;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -235,6 +278,7 @@ button:hover {
           align-items: center;
   height: 2rem;
   padding: 0 10px;
+  background-color: var(--background-access-bar);
   font-size: 0.9rem;
   font-weight: bold;
 }
@@ -290,21 +334,66 @@ button:hover {
 /* ========== MAIN NAV ========== */
 .menu-button {
   position: absolute;
-  top: 2.25rem;
+  top: 2.5rem;
   left: 5px;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background: var(--menu-button) no-repeat;
   background-size: contain;
   background-position: center;
+  border: none;
+  opacity: 0.75;
 }
 
 .menu-button:hover {
+  opacity: 1;
+}
+
+.add-task-button {
+  position: absolute;
+  top: 3rem;
+  right: 15px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: var(--color-primary-var);
+  border: none;
+  box-shadow: 0 0 2px black;
+  font-size: 1.25rem;
+  text-align: right;
+  font-weight: bold;
+}
+
+.add-task-button span {
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.menu-close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  padding: 15px;
+  background: var(--close-button) no-repeat;
+  background-size: contain;
+  background-position: center;
+  border: none;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+}
+
+.menu-close-button:hover {
   cursor: pointer;
+  -webkit-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 
 #main-nav {
-  display: none;
+  visibility: hidden;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -312,12 +401,16 @@ button:hover {
           flex-direction: column;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -800px;
   width: 100vw;
+  height: 100vh;
   margin-top: 2rem;
-  padding: 10px 0;
-  background-color: var(--background-main-nav);
+  background-color: var(--background-menu);
   color: var(--primary-text);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-transition: left 0.5s;
+  transition: left 0.5s;
 }
 
 .groups-container {
@@ -344,6 +437,7 @@ button:hover {
   background-color: transparent;
   color: var(--primary-text);
   border: none;
+  font-size: 1.25rem;
   text-align: left;
 }
 
@@ -351,58 +445,70 @@ button:hover {
   background-color: black;
 }
 
-/* .groups-container button:focus {
-  outline: var(--focus);
-} */
-
 .default-groups-container {
-  margin-bottom: 25px;
-}
-
-.close-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 25px;
-  height: 25px;
-  background: var(--close-button) no-repeat;
-  background-size: contain;
-  background-position: center;
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s;
-}
-
-.close-button:hover {
-  cursor: pointer;
-  -webkit-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-          transform: rotate(90deg);
+  margin: 35px 0 25px;
 }
 
 
 /* ========== MAIN CONTENT ========== */
 #main {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   min-height: 100vh;
-  margin-top: 3.5rem;
-  padding: 10px;
-  color: white;
+  margin-top: 7rem;
+  color: var(--primary-text);
 }
 
-.page-container {
+.task-container {
   width: 100%;
-  height: 100vh;
+  padding: 20px;
 }
 
 
 /* ========== LOWER NAV ========== */
 #lower-nav {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 100%;
-  height: 50px;
+  height: 100px;
+  padding: 10px 0;
   bottom: 0;
   left: 0;
-  background: rgb(4, 0, 255);
+  background: var(--background-menu);
+}
+
+#lower-nav a {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 2px;
+  color: var(--primary-text);
+  text-decoration: none;
+}
+
+#lower-nav a:first-of-type {
+  margin-bottom: 15px;
+}
+
+#lower-nav a:first-of-type:hover {
+  text-decoration: underline;
 }
 
 /* ========== MEDIA QUERIES ========== */
@@ -424,6 +530,15 @@ button:hover {
 }
 
 @media only screen and (min-width: 768px) {
+  /* :root {
+    height: 100vh;
+  }
+
+  body {
+    height: 100vh;
+    max-height: 100vh;
+  } */
+
   #accessibility-contents {
     -webkit-box-pack: start;
     -webkit-justify-content: flex-start;
@@ -433,6 +548,43 @@ button:hover {
 
   #accessibility-contents > * {
     margin-right: 50px;
+  }
+
+  #accessibility-label {
+    position: fixed;
+    width: 100%;
+  }
+
+  .menu-button,
+  .menu-close-button {
+    display: none;
+  }
+
+  .add-task-button {
+    position: fixed;
+  }
+
+  #main-nav {
+    position: fixed;
+    width: 300px;
+    height: calc(100vh - 100px);
+    margin-top: 0;
+  }
+
+  .default-groups-container {
+    margin: 50px 0 25px;
+  }
+
+  #main {
+    height: 100vh;
+    margin: 2rem 0 40px 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #lower-nav {
+    position: fixed;
+    width: 300px;
   }
 }
 
