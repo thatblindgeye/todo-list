@@ -6,7 +6,6 @@ const DOM = (() => {
   const animationSwitch = 
         document.querySelector("#animation-switch");
   const githubLogo = document.querySelector("#lower-nav img");
-  const menu = document.querySelector("#main-nav");
   const modal = document.querySelector(".modal-container");
   const modalDisableButton = document.querySelector(".disable-button");
   const modalContinueButton = document.querySelector(".continue-button");
@@ -17,7 +16,6 @@ const DOM = (() => {
     accessibilityContainer,
     animationSwitch,
     githubLogo,
-    menu,
     modal,
     modalContinueButton,
     modalDisableButton,
@@ -111,7 +109,7 @@ const accessibilityOptions = (() => {
     DOM.animationSwitch.setAttribute("aria-checked", "true")
     DOM.animationSwitch.textContent = "Animations Enabled";
     DOM.themeSwitch.style.transition = "background-position 0.3s ease-in";
-    DOM.menu.style.transition = "left 0.5s";
+    document.querySelector("#main-nav").style.transition = "left 0.5s";
     Array.from(document.querySelectorAll(".label-arrow")).forEach(item => {
       item.style.transition = "transform 0.75s";
     });

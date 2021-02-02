@@ -54,7 +54,7 @@
     --theme-toggle-icon: url("/dist/assets/images/icons/wb_sunny-white-24dp.svg");
     --close-button: url("/dist/assets/images/icons/close-white-24dp.svg");
     --menu-button: url("/dist/assets/images/icons/menu-white-24dp.svg");
-    --add-task-button: url("/dist/assets/images/icons/add-white-24dp.svg")
+    --add-task-button: url("/dist/assets/images/icons/add-white-24dp.svg");
 }
 
 :root[theme="light"] {
@@ -84,7 +84,7 @@
     --theme-toggle-icon: url("/dist/assets/images/icons/wb_sunny-black-24dp.svg");
     --close-button: url("/dist/assets/images/icons/close-black-24dp.svg");
     --menu-button: url("/dist/assets/images/icons/menu-black-24dp.svg");
-    --add-task-button: url("/dist/assets/images/icons/add-black-24dp.svg")
+    --add-task-button: url("/dist/assets/images/icons/add-black-24dp.svg");
 }
 
 * {
@@ -362,12 +362,13 @@ button:hover {
 }
 
 #main-nav {
+  z-index: 1;
   visibility: hidden;
   flex-direction: column;
   position: absolute;
   top: 0;
   left: -800px;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   margin-top: 2rem;
   background-color: var(--background-menu);
@@ -430,41 +431,63 @@ button:hover {
 
 .task-container {
   width: 95%;
+  max-width: 500px;
   height: 95%;
-  margin-bottom: 10px;
-  padding: 15px 5px;
+  margin: 15px 0 10px;
+  padding: 0 5px 15px;
 }
 
-.selected-group {
+.task-container-header {
   margin-bottom: 25px;
 }
 
+.edit-group {
+  margin-right: 25px;
+}
+
+.edit-group,
+.delete-group {
+  padding: 5px 0;
+  background-color: transparent;
+  color: var(--primary-text);
+  opacity: var(--inactive);
+  border: none;
+}
+
+.edit-group:hover,
+.edit-group:focus,
+.delete-group:hover,
+.delete-group:focus {
+  opacity: 1;
+}
+
 .todo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  margin: 10px 0;
-  padding: 5px 5px 5px 1.5rem;
-  /* opacity: var(--inactive); */
+  padding: 10px;
 }
 
-.todo-item:hover,
-.todo-item:focus-within {
-  background-color: var(--background-todo-hover);
+
+
+.todo-header {
+  display: grid;
+  grid-template-columns: 15px 1fr max-content;
+  grid-template-rows: max-content max-content;
+  column-gap: 10px;
+  align-items: start;
 }
 
-.todo-name input {
-  margin-right: 10px;
+.todo-details {
+  /* display: none; */
+  margin: 15px 0 0 25px;
+  font-style: italic;
 }
 
-.todo-priority {
-  position: absolute;
-  color: var(--error);
-  font-size: 1.5rem;
-  left: 5px;
+.todo-details p {
+  opacity: var(--inactive);
 }
 
+.todo-details button:hover {
+  opacity: 1;
+}
 
 /* ========== LOWER NAV ========== */
 #lower-nav {
@@ -539,6 +562,7 @@ button:hover {
   }
 
   #main-nav {
+    z-index: 0;
     position: fixed;
     width: 300px;
     height: calc(100vh - 97px);

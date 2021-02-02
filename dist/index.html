@@ -50,31 +50,40 @@
       <nav id="main-nav" class="animated">
         <button type="button" class="menu-close-button animated focusable" aria-label="Close main menu"></button>
         <div class="default-groups-container groups-container">
-          <button class="focusable">Important</button>
-          <button class="focusable">This Week</button>
-          <button class="focusable">Later</button>
-          <button class="focusable">Eventually</button>
+          <button class="focusable default-group">Important</button>
+          <button class="focusable default-group">Next 7 Days</button>
+          <button class="focusable default-group">Later</button>
+          <button class="focusable default-group">Eventually</button>
         </div>
         <div class="custom-groups-container groups-container">
           <button type="button" class="add-group-button focusable">
             <span class="material-icons">add</span>
             Add Group
           </button>
+          <button type="button" class="custom-group focusable">Chores</button>
         </div>
       </nav>
     </header>
     <div id="main">
-      <article class="task-container" tabindex="0">
-        <h1 class="selected-group">Chores</h1>
+      <article class="task-container">
+        <div class="task-container-header">
+          <h1 class="selected-group">Important</h1>
+          <button type="button" class="focusable edit-group">Edit Group</button>
+          <button type="button" class="focusable delete-group">Delete Group</button>
+        </div>
         <section class="todo-item">
-          <div class="todo-priority"></div>
-          <div class="todo-name"><input type="checkbox" class="focusable">Do the dishes</div>
-          <div class="todo-due">5/6/2021</div>
-        </section>
-        <section class="todo-item">
-          <div class="todo-priority">!</div>
-          <div class="todo-name"><input type="checkbox" class="focusable">Do the dishes</div>
-          <div class="todo-due">no due date</div>
+          <div class="todo-header">
+            <input type="checkbox" class="todo-status">
+            <span class="todo-name">Do the dishes Do the dishes</span>
+            <span class="todo-date">Today</span>
+          </div>
+          <div class="todo-details">
+            <p>Put the soap on the dish, scrub it in to get the gunk off</p>
+            <div class="task-buttons">
+              <button type="button" class="edit-task">Edit</button>
+              <button type="button" class="delete-task">Delete</button>
+            </div>
+          </div>
         </section>
       </article>
     </div>

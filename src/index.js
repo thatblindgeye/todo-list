@@ -1,34 +1,35 @@
 "use strict";
 
 import './style.css';
-import {DOM, siteStorage, displayOptions, accessibilityOptions} from "./site-settings";
+import {siteStorage, displayOptions, accessibilityOptions} from "./site-settings";
 
 const menu = (() => {
-  const menuOpen = document.querySelector(".menu-button");
-  const menuClose = document.querySelector(".menu-close-button");
+  const menu = document.querySelector("#main-nav");
+  const menuButton = document.querySelector(".menu-button");
+  const closeButton = document.querySelector(".menu-close-button");
   
   const _menuVisibility = () => {
     if (document.documentElement.scrollWidth > 767) {
-      DOM.menu.style.visibility = "visible";
-      DOM.menu.style.left = "0";
+      menu.style.visibility = "visible";
+      menu.style.left = "0";
     } else {
-      DOM.menu.style.visibility = "hidden";
-      DOM.menu.style.left = "-800px";
+      menu.style.visibility = "hidden";
+      menu.style.left = "-800px";
     };
   };
 
-  menuOpen.addEventListener("click", () => {
-    DOM.menu.style.visibility = "visible";
-    DOM.menu.style.left = "0";
-    document.querySelector(".menu-close-button").focus();
+  menuButton.addEventListener("click", () => {
+    menu.style.visibility = "visible";
+    menu.style.left = "0";
+    closeButton.focus();
   });
   
-  menuClose.addEventListener("click", () => {
-    DOM.menu.style.left = "-800px";
+  closeButton.addEventListener("click", () => {
+    menu.style.left = "-800px";
     setTimeout(() => {
-      DOM.menu.style.visibility = "hidden"
+      menu.style.visibility = "hidden"
     }, 600);
-    menuOpen.focus();
+    menuButton.focus();
   });
 
   window.addEventListener("resize", _menuVisibility);
