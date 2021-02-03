@@ -6,19 +6,16 @@ const DOM = (() => {
   const animationSwitch = 
         document.querySelector("#animation-switch");
   const githubLogo = document.querySelector("#lower-nav img");
-  const modal = document.querySelector(".modal-container");
-  const modalDisableButton = document.querySelector(".disable-button");
-  const modalContinueButton = document.querySelector(".continue-button");
+  const modalBox = document.querySelector(".modal-box");
+  const modalContainer = document.querySelector(".modal-container");
   const themeSwitch = document.querySelector("#theme-switch");
-
 
   return {
     accessibilityContainer,
     animationSwitch,
     githubLogo,
-    modal,
-    modalContinueButton,
-    modalDisableButton,
+    modalBox,
+    modalContainer,
     themeSwitch
   }
 })();
@@ -82,31 +79,78 @@ const displayOptions = (() => {
   window.addEventListener("load", _onLoad);
 })();
 
+const warningModal = (() => {
+  const render = () => {
+    const heading = document.createElement("h1");
+    const para1 = document.createElement("p");
+    const para2 = document.createElement("p");
+    const disableButton = document.createElement("button");
+    const continueButton = document.createElement("button");
+
+    heading.textContent = "This site uses animation effects.";
+
+    para1.textContent = "Effects include moving menus and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.";
+  
+    para2.textContent= "You can later change this setting in the Display & Accessibility tab at the top of the page.";
+  
+    disableButton.setAttribute("type", "button");
+    disableButton.classList.add("disable-button", "focusable");
+    disableButton.textContent = "Disable Animations";
+    disableButton.addEventListener("click", () => {
+      accessibilityOptions.animationsDisabled();
+      siteStorage.saveToLocal();
+      DOM.modalContainer.style.display = "none";
+    });
+    
+    continueButton.setAttribute("type", "button");
+    continueButton.classList.add("continue-button", "focusable");
+    continueButton.textContent = "Continue with Animations";
+    continueButton.addEventListener("click", () => {
+      accessibilityOptions.animationsEnabled();
+      siteStorage.saveToLocal();
+      DOM.modalContainer.style.display = "none";
+    });
+
+    DOM.modalBox.appendChild(heading);
+    DOM.modalBox.appendChild(para1);
+    DOM.modalBox.appendChild(para2);
+    DOM.modalBox.appendChild(disableButton);
+    DOM.modalBox.appendChild(continueButton);
+  };
+
+  const _onLoad = () => {
+    if (localStorage.length === 0) {
+      DOM.modalBox.style.display = "flex";
+      DOM.modalContainer.style.display = "flex";
+      render();
+    };
+  };
+
+  window.addEventListener("load", _onLoad);
+})();
+
 const accessibilityOptions = (() => {
   const _onLoad = () => {
-    if (localStorage.length > 0) {
-      DOM.modal.style.display = "none";
-    };
     if (localStorage.getItem("animations-enabled") === "false") {
-      _animationsDisabled();
+      animationsDisabled();
     } else {
-      _animationsEnabled();
+      animationsEnabled();
     };
   };
 
   const _toggleAnimations = () => {
     if (DOM.animationSwitch.getAttribute("aria-checked") === "true") {
-      _animationsDisabled();
+      animationsDisabled();
     } else {
-      _animationsEnabled();
+      animationsEnabled();
     };
     siteStorage.saveToLocal();
   };
 
-  const _animationsEnabled = () => {
+  const animationsEnabled = () => {
+    DOM.animationSwitch.setAttribute("aria-checked", "true");
     document.documentElement.style.scrollBehavior = "smooth";
     DOM.accessibilityContainer.style.transition = "top 0.75s ease-in-out";
-    DOM.animationSwitch.setAttribute("aria-checked", "true")
     DOM.animationSwitch.textContent = "Animations Enabled";
     DOM.themeSwitch.style.transition = "background-position 0.3s ease-in";
     document.querySelector("#main-nav").style.transition = "left 0.5s";
@@ -115,26 +159,27 @@ const accessibilityOptions = (() => {
     });
   };
         
-  const _animationsDisabled = () => {
-    document.documentElement.style.scrollBehavior = "unset";
-    DOM.animationSwitch.setAttribute("aria-checked", "false")
+  const animationsDisabled = () => {
+    DOM.animationSwitch.setAttribute("aria-checked", "false");
+    document.documentElement.style.scrollBehavior = "auto";
+    DOM.animationSwitch.setAttribute("aria-checked", "false");
     DOM.animationSwitch.textContent = "Animations Disabled";
     Array.from(document.querySelectorAll(".animated")).forEach(item => {
       item.style.transition = "none";
     });
   };
 
-  DOM.modalDisableButton.addEventListener("click", () => {
-    _animationsDisabled();
-    siteStorage.saveToLocal();
-    DOM.modal.style.display = "none";
-  });
+  // document.querySelector(".disable-button").addEventListener("click", () => {
+  //   _animationsDisabled();
+  //   siteStorage.saveToLocal();
+  //   DOM.modalContainer.style.display = "none";
+  // });
 
-  DOM.modalContinueButton.addEventListener("click", () => {
-    _animationsEnabled();
-    siteStorage.saveToLocal();
-    DOM.modal.style.display = "none";
-  });
+  // document.querySelector(".continue-button").addEventListener("click", () => {
+  //   _animationsEnabled();
+  //   siteStorage.saveToLocal();
+  //   DOM.modalContainer.style.display = "none";
+  // });
 
   DOM.animationSwitch.addEventListener("click", _toggleAnimations);
   DOM.animationSwitch.addEventListener("keydown", (e) => {
@@ -145,6 +190,8 @@ const accessibilityOptions = (() => {
   });
   
   window.addEventListener("load", _onLoad);
+
+  return {animationsEnabled, animationsDisabled}
 })();
 
-export {DOM, siteStorage, displayOptions, accessibilityOptions}
+export {warningModal, displayOptions, accessibilityOptions}

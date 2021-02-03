@@ -1,7 +1,7 @@
 "use strict";
 
 import './style.css';
-import {siteStorage, displayOptions, accessibilityOptions} from "./site-settings";
+import {warningModal, displayOptions, accessibilityOptions} from "./site-settings";
 
 const menu = (() => {
   const menu = document.querySelector("#main-nav");
@@ -36,3 +36,10 @@ const menu = (() => {
 
   window.addEventListener("load", _menuVisibility);
 })();
+
+
+Array.from(document.querySelectorAll(".todo-header label")).forEach(checkbox => {
+  checkbox.addEventListener("click", (e) => {
+    console.log(document.querySelector(".selected-group").textContent + " " + e.currentTarget.children[1].textContent);
+  });
+});
