@@ -68,21 +68,42 @@
       <article class="task-container">
         <div class="task-container-header">
           <h1 class="selected-group">Important</h1>
-          <button type="button" class="focusable edit-group">Edit Group</button>
-          <button type="button" class="focusable delete-group">Delete Group</button>
+          <button type="button" class="focusable edit-group">
+            <span class="material-icons">mode_edit</span>
+          </button>
+          <button type="button" class="focusable delete-group">
+            <span class="material-icons">delete</span>
+          </button>
         </div>
         <section class="todo-item">
           <div class="todo-header">
-            <input type="checkbox" class="todo-status">
-            <span class="todo-name">Do the dishes Do the dishes</span>
-            <span class="todo-date">Today</span>
+            <span class="todo-priority" tabindex="0" aria-label="Important priority">
+              <span class="material-icons">priority_high</span>
+            </span>
+            <label>
+              <span role="checkbox" class="todo-status" tabindex="0"></span>
+              <span class="todo-name">Do the dishes Do the dishes</span>
+            </label>
+            <span class="todo-date" aria-label="Due date">Today</span>
+            <button type="button" class="todo-view-details focusable" aria-label="View details">
+              <span class="material-icons">more_horiz</span>
+            </button>
           </div>
-          <div class="todo-details">
-            <p>Put the soap on the dish, scrub it in to get the gunk off</p>
-            <div class="task-buttons">
-              <button type="button" class="edit-task">Edit</button>
-              <button type="button" class="delete-task">Delete</button>
-            </div>
+        </section>
+
+        <section class="todo-item">
+          <div class="todo-header">
+            <span class="todo-priority" tabindex="0" aria-label="Important priority">
+              <span class="material-icons">priority_high</span>
+            </span>
+            <label>
+              <span role="checkbox" class="todo-status" tabindex="0"></span>
+              <span class="todo-name">Do the dishes Do the dishes</span>
+            </label>
+            <span class="todo-date" aria-label="Due date">Today</span>
+            <button type="button" class="todo-view-details focusable" aria-label="View details">
+              <span class="material-icons">more_horiz</span>
+            </button>
           </div>
         </section>
       </article>
