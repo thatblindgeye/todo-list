@@ -12,7 +12,7 @@
     --text-white-low: rgba(255, 255, 255, 0.38);
   /* misc */
     --active: 0.87;
-    --inactive: 0.6;
+    --inactive: 0.7;
     --disabled: 0.38;
 }
 
@@ -29,6 +29,7 @@
     --background-menu: rgb(39, 39, 39);
     --background-menu-hover: rgb(51, 51, 51);
     --background-modal: rgb(54, 54, 54);
+    --background-todo: rgb(30, 30, 30);
   /* elevation refs */
     --elevation-00dp: rgb(18, 18, 18); /* text btn, top app bar (rest), */
     --elevation-01dp: rgb(30, 30, 30); /* searchbar (rest), card (rest), switch */
@@ -41,7 +42,8 @@
     --elevation-16dp: rgb(54, 54, 54); /* modal bottom/side, nav drawer */
     --elevation-24dp: rgb(56, 56, 56); /* dialogue */
   /* text */
-  --primary-text: rgb(240, 240, 240, 0.87);
+    --primary-text: rgb(240, 240, 240, 0.87);
+    --inactive-text: rgb(240, 240, 240, 0.6);
   /* borders */
     --border-primary: rgb(240, 240, 240);
     --separator: 1px solid rgb(240, 240, 240, 0.38);
@@ -70,8 +72,10 @@
     --background-menu: rgb(240, 240, 240);
     --background-menu-hover: rgb(220, 220, 220);
     --background-modal: rgb(220, 220, 220);
+    --background-todo: rgb(220, 220, 220);
   /* text */
     --primary-text: rgb(0, 0, 0, 0.87);
+    --inactive-text: rgb(0, 0, 0, 0.6);
   /* borders */
     --border-primary: rgb(18, 18, 18);
     --separator: 1px solid rgb(18, 18, 18, 0.38);
@@ -442,16 +446,18 @@ button:hover {
 }
 
 .edit-group {
-  margin-right: 25px;
+  margin-right: 5px;
 }
 
 .edit-group,
 .delete-group {
-  padding: 5px 0;
+  margin-top: 5px;
+  padding: 0;
   background-color: transparent;
   color: var(--primary-text);
-  opacity: var(--inactive);
+  opacity: 0.8;
   border: none;
+  font-size: 18px;
 }
 
 .edit-group:hover,
@@ -463,30 +469,56 @@ button:hover {
 
 .todo-item {
   padding: 10px;
+  color: var(--primary-text);
 }
-
-
 
 .todo-header {
   display: grid;
-  grid-template-columns: 15px 1fr max-content;
+  grid-template-columns: 1rem 1fr max-content max-content;
   grid-template-rows: max-content max-content;
   column-gap: 10px;
   align-items: start;
 }
 
-.todo-details {
-  /* display: none; */
-  margin: 15px 0 0 25px;
-  font-style: italic;
+.todo-priority {
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0 -10px;
+  font-size: 1.5rem;
 }
 
-.todo-details p {
-  opacity: var(--inactive);
+.todo-header label {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: start;
+  column-gap: 10px;
 }
 
-.todo-details button:hover {
-  opacity: 1;
+.todo-header label:hover {
+  cursor: pointer;
+}
+
+.todo-header label:focus-within {
+  outline: var(--focus);
+}
+
+.todo-status {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  background: url("/dist/assets/images/icons/done-black-24dp.svg") no-repeat center;
+  background-size: contain;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.todo-view-details {
+  padding: 0;
+  background-color: transparent;
+  color: var(--primary-text);
+  border: none;
+  opacity: 0.9;
 }
 
 /* ========== LOWER NAV ========== */
