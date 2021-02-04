@@ -3,8 +3,7 @@
   <head>
     <title>Will-Do</title>
     <meta name="keywords" content="to-do, task manager, planner">
-    <meta name="description" content="An all new task manager for your daily life.">
-    <meta name="theme-color" content="#121212">
+    <meta name="description" content="A task manager that helps ensure that you will do any task you need to get done.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -31,13 +30,13 @@
     <header>
       <div id="accessibility-container" class="animated focusable" aria-label="Display and Accessibility menu" tabindex="0">
         <div id="accessibility-contents">
-          <a href="#main" id="skip-link" class="focusable">Skip to main content</a>
+          <a href="#main-content" id="skip-link" class="focusable">Skip to main content</a>
           <div id="theme-switch" class="animated focusable" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle Light theme">
           </div>
           <div id="animation-switch" class="focusable" role="switch" aria-checked="true" tabindex="0" aria-label="Toggle animations">
           </div>
         </div>
-        <div id="accessibility-label">
+        <div id="accessibility-label" aria-hidden="true">
           Display & Accessibility 
           <div class="label-arrow-container">
             <div class="label-arrow label-arrow-left animated"></div>
@@ -45,79 +44,73 @@
           </div>
         </div>
       </div>
-      <button type="button" class="menu-button focusable" aria-label="Open main menu"></button>
+      <button type="button" class="menu-button focusable" aria-label="Open task groups menu"></button>
       <button type="button" class="add-task-button focusable">
         <span class="material-icons">add</span>
         Add Task
       </button>
       <nav id="main-nav" class="animated">
-        <button type="button" class="menu-close-button animated focusable" aria-label="Close main menu"></button>
+        <button type="button" class="menu-close-button animated focusable" aria-label="Close task groups menu"></button>
         <div class="default-groups-container groups-container">
-          <button class="focusable default-group">Important</button>
-          <button class="focusable default-group">Next 7 Days</button>
-          <button class="focusable default-group">Later</button>
-          <button class="focusable default-group">Eventually</button>
+          <button class="focusable default-group group-btn active" aria-label="Task group: important">Important</button>
+          <button class="focusable default-group group-btn" aria-label="Task group: Next seven days">Next 7 Days</button>
+          <button class="focusable default-group group-btn" aria-label="Task group: Later">Later</button>
+          <button class="focusable default-group group-btn" aria-label="Task group: Eventually">Eventually</button>
         </div>
         <div class="custom-groups-container groups-container">
           <button type="button" class="add-group-button focusable">
             <span class="material-icons">add</span>
             Add Group
           </button>
-          <button type="button" class="custom-group focusable">Chores</button>
+          <button type="button" class="custom-group focusable group-btn" aria-label="Task group: Example">Example</button>
         </div>
       </nav>
     </header>
-    <div id="main">
+
+    <main id="main-content">
       <article class="task-container">
         <div class="task-container-header">
           <h1 class="selected-group">Important</h1>
-          <button type="button" class="focusable edit-group">
-            <span class="material-icons">mode_edit</span>
-          </button>
-          <button type="button" class="focusable delete-group">
-            <span class="material-icons">delete</span>
-          </button>
+          <span role="button" class="material-icons focusable group-options-btn" aria-label="View group options" tabindex="0">more_horiz</span>
         </div>
-        <section class="todo-item">
-          <div class="todo-header">
-            <span class="todo-priority" aria-label="Important priority">
-              <span class="material-icons">priority_high</span>
-            </span>
-            <label>
-              <span role="checkbox" class="todo-status" tabindex="0"></span>
-              <span class="todo-name">Do the dishes Do the dishes</span>
-            </label>
-            <span class="todo-date" aria-label="Due date">Today</span>
-            <button type="button" class="todo-view-details focusable" aria-label="View details">
-              <span class="material-icons">more_horiz</span>
-            </button>
-          </div>
+        
+        <section class="task-item" data-project="chores">
+          <span class="task-priority" aria-label="Important task">
+            <span class="material-icons">priority_high</span>
+          </span>
+          <span role="checkbox" aria-checked="false" class="task-status focusable" tabindex="0" aria-label="Do the dishes" style="background-image: none;"></span>
+          <span class="task-name focusable" tabindex="0" arial-label="Toggle details for task Do the dishes">Do the dishes</span>
+          <span class="task-date" aria-label="Due date for task Do the dishes: Today">Today</span>
+          <div class="task-details">
+            <p class="task-notes">Buy the following: Buy the following Buy the following</p>
+            <button type="button" class="edit-btn focusable" aria-label="Edit task Do the dishes">Edit</button>
+            <button type="button" class="delete-btn focusable" aria-label="Delete task Do the dishes">Delete</button>
+          </div>  
         </section>
 
-        <section class="todo-item">
-          <div class="todo-header">
-            <span class="todo-priority" aria-label="Important priority">
-            </span>
-            <label>
-              <span role="checkbox" class="todo-status" tabindex="0"></span>
-              <span class="todo-name">Feed the pets</span>
-            </label>
-            <span class="todo-date" aria-label="Due date">Today</span>
-            <button type="button" class="todo-view-details focusable" aria-label="View details">
-              <span class="material-icons">more_horiz</span>
-            </button>
-          </div>
+        <section class="task-item" data-project="chores">
+          <span class="task-priority" aria-label="Important task">
+            <span class="material-icons">priority_high</span>
+          </span>
+          <span role="checkbox" aria-checked="false" class="task-status focusable" tabindex="0" aria-label="Do the dishes" style="background-image: url('assets/images/icons/done-black-24dp.svg');"></span>
+          <span class="task-name focusable" tabindex="0" arial-label="Toggle details for task Do the dishes">Do the dishes</span>
+          <span class="task-date" aria-label="Due date for task Do the dishes:">Today</span>
+          <div class="task-details">
+            <p class="task-notes">Buy the following: Buy the following Buy the following</p>
+            <button type="button" class="edit-btn focusable" aria-label="Edit task Do the dishes">Edit</button>
+            <button type="button" class="delete-btn focusable" aria-label="Delete task Do the dishes">Delete</button>
+          </div>  
         </section>
+
       </article>
-    </div>
+    </main>
 
     <footer>
       <nav id="lower-nav">
-        <a href="#" class="focusable">Back to Top</a>
+        <a href="#" class="focusable back-to-top">Back to Top</a>
         <a href="https://github.com/thatblindgeye"
-        class="focusable">
-          <img src="" 
-                alt="A Github logo">
+        class="focusable github-link" aria-label="github.com/thatblindgeye">
+          <img src="" alt="A Github logo">
         </a>
       </nav>
     </footer>
