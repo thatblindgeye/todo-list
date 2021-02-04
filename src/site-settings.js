@@ -6,21 +6,21 @@ const DOM = (() => {
   const animationSwitch = 
         document.querySelector("#animation-switch");
   const githubLogo = document.querySelector("#lower-nav img");
-  const modalBox = document.querySelector(".modal-box");
-  const modalContainer = document.querySelector(".modal-container");
+  // const modalBox = document.querySelector(".modal-box");
+  // const modalContainer = document.querySelector(".modal-container");
   const themeSwitch = document.querySelector("#theme-switch");
 
   return {
     accessibilityContainer,
     animationSwitch,
     githubLogo,
-    modalBox,
-    modalContainer,
+    // modalBox,
+    // modalContainer,
     themeSwitch
   }
 })();
 
-const siteStorage = (() => {
+const settings = (() => {
   const saveToLocal = () => {
     localStorage.setItem(
       "theme", document.documentElement.getAttribute("theme"));
@@ -49,7 +49,7 @@ const displayOptions = (() => {
     } else {
       _lightTheme();
     };
-    siteStorage.saveToLocal();
+    settings.saveToLocal();
   };
 
   const _darkTheme = () => {
@@ -79,55 +79,55 @@ const displayOptions = (() => {
   window.addEventListener("load", _onLoad);
 })();
 
-const warningModal = (() => {
-  const render = () => {
-    const heading = document.createElement("h1");
-    const para1 = document.createElement("p");
-    const para2 = document.createElement("p");
-    const disableButton = document.createElement("button");
-    const continueButton = document.createElement("button");
+// const warningModal = (() => {
+//   const render = () => {
+//     const heading = document.createElement("h1");
+//     const para1 = document.createElement("p");
+//     const para2 = document.createElement("p");
+//     const disableButton = document.createElement("button");
+//     const continueButton = document.createElement("button");
 
-    heading.textContent = "This site uses animation effects.";
+//     heading.textContent = "This site uses animation effects.";
 
-    para1.textContent = "Effects include moving menus and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.";
+//     para1.textContent = "Effects include moving menus and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.";
   
-    para2.textContent= "You can later change this setting in the Display & Accessibility tab at the top of the page.";
+//     para2.textContent= "You can later change this setting in the Display & Accessibility tab at the top of the page.";
   
-    disableButton.setAttribute("type", "button");
-    disableButton.classList.add("disable-button", "focusable");
-    disableButton.textContent = "Disable Animations";
-    disableButton.addEventListener("click", () => {
-      accessibilityOptions.animationsDisabled();
-      siteStorage.saveToLocal();
-      DOM.modalContainer.style.display = "none";
-    });
+//     disableButton.setAttribute("type", "button");
+//     disableButton.classList.add("disable-button", "focusable", "primary-btn");
+//     disableButton.textContent = "Disable Animations";
+//     disableButton.addEventListener("click", () => {
+//       accessibilityOptions.animationsDisabled();
+//       settings.saveToLocal();
+//       DOM.modalContainer.style.display = "none";
+//     });
     
-    continueButton.setAttribute("type", "button");
-    continueButton.classList.add("continue-button", "focusable");
-    continueButton.textContent = "Continue with Animations";
-    continueButton.addEventListener("click", () => {
-      accessibilityOptions.animationsEnabled();
-      siteStorage.saveToLocal();
-      DOM.modalContainer.style.display = "none";
-    });
+//     continueButton.setAttribute("type", "button");
+//     continueButton.classList.add("continue-button", "focusable", "secondary-btn");
+//     continueButton.textContent = "Continue with Animations";
+//     continueButton.addEventListener("click", () => {
+//       accessibilityOptions.animationsEnabled();
+//       settings.saveToLocal();
+//       DOM.modalContainer.style.display = "none";
+//     });
 
-    DOM.modalBox.appendChild(heading);
-    DOM.modalBox.appendChild(para1);
-    DOM.modalBox.appendChild(para2);
-    DOM.modalBox.appendChild(disableButton);
-    DOM.modalBox.appendChild(continueButton);
-  };
+//     DOM.modalBox.appendChild(heading);
+//     DOM.modalBox.appendChild(para1);
+//     DOM.modalBox.appendChild(para2);
+//     DOM.modalBox.appendChild(disableButton);
+//     DOM.modalBox.appendChild(continueButton);
+//   };
 
-  const _onLoad = () => {
-    if (localStorage.length === 0) {
-      DOM.modalBox.style.display = "flex";
-      DOM.modalContainer.style.display = "flex";
-      render();
-    };
-  };
+//   const _onLoad = () => {
+//     if (localStorage.length === 0) {
+//       DOM.modalBox.style.display = "flex";
+//       DOM.modalContainer.style.display = "flex";
+//       render();
+//     };
+//   };
 
-  window.addEventListener("load", _onLoad);
-})();
+//   window.addEventListener("load", _onLoad);
+// })();
 
 const accessibilityOptions = (() => {
   const _onLoad = () => {
@@ -144,7 +144,7 @@ const accessibilityOptions = (() => {
     } else {
       animationsEnabled();
     };
-    siteStorage.saveToLocal();
+    settings.saveToLocal();
   };
 
   const animationsEnabled = () => {
@@ -171,13 +171,13 @@ const accessibilityOptions = (() => {
 
   // document.querySelector(".disable-button").addEventListener("click", () => {
   //   _animationsDisabled();
-  //   siteStorage.saveToLocal();
+  //   settings.saveToLocal();
   //   DOM.modalContainer.style.display = "none";
   // });
 
   // document.querySelector(".continue-button").addEventListener("click", () => {
   //   _animationsEnabled();
-  //   siteStorage.saveToLocal();
+  //   settings.saveToLocal();
   //   DOM.modalContainer.style.display = "none";
   // });
 
@@ -194,4 +194,4 @@ const accessibilityOptions = (() => {
   return {animationsEnabled, animationsDisabled}
 })();
 
-export {warningModal, displayOptions, accessibilityOptions}
+export {displayOptions, accessibilityOptions, settings}

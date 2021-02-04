@@ -1,45 +1,76 @@
 "use strict";
 
 import './style.css';
-import {warningModal, displayOptions, accessibilityOptions} from "./site-settings";
+import {displayOptions, accessibilityOptions} from "./site-settings";
+import {warningModal} from "./modals";
+
+const DOM = (() => {
+  const groupButtons = document.getElementsByClassName("group-btn");
+  const menuContainer = document.querySelector("#main-nav");
+  const menuOpenButton = document.querySelector(".menu-button");
+  const menuCloseButton = document.querySelector(".menu-close-button");
+  
+  return {
+    groupButtons,
+    menuContainer,
+    menuOpenButton,
+    menuCloseButton
+  }
+})();
 
 const menu = (() => {
-  const menu = document.querySelector("#main-nav");
-  const menuButton = document.querySelector(".menu-button");
-  const closeButton = document.querySelector(".menu-close-button");
-  
-  const _menuVisibility = () => {
-    if (document.documentElement.scrollWidth > 767) {
-      menu.style.visibility = "visible";
-      menu.style.left = "0";
+  const _menuForViewSize = () => {
+    if (document.documentElement.scrollWidth > 763) {
+      DOM.menuContainer.style.visibility = "visible";
+      DOM.menuContainer.style.left = "0";
     } else {
-      menu.style.visibility = "hidden";
-      menu.style.left = "-800px";
+      DOM.menuContainer.style.visibility = "hidden";
+      DOM.menuContainer.style.left = "-800px";
     };
   };
 
-  menuButton.addEventListener("click", () => {
-    menu.style.visibility = "visible";
-    menu.style.left = "0";
-    closeButton.focus();
-  });
-  
-  closeButton.addEventListener("click", () => {
-    menu.style.left = "-800px";
-    setTimeout(() => {
-      menu.style.visibility = "hidden"
-    }, 600);
-    menuButton.focus();
-  });
+  window.addEventListener("resize", _menuForViewSize);
+  window.addEventListener("load", _menuForViewSize);
 
-  window.addEventListener("resize", _menuVisibility);
+  const _toggleMenu = () => {
+    if (DOM.menuContainer.style.visibility === "hidden") {
+      DOM.menuContainer.style.visibility = "visible";
+      DOM.menuContainer.style.left = "0";
+      DOM.menuCloseButton.focus();
+    } else {
+      DOM.menuContainer.style.left = "-800px";
+      setTimeout(() => {
+        DOM.menuContainer.style.visibility = "hidden"
+      }, 600);
+      DOM.menuOpenButton.focus();
+    };
+  };
 
-  window.addEventListener("load", _menuVisibility);
+  DOM.menuOpenButton.addEventListener("click", _toggleMenu);
+  DOM.menuCloseButton.addEventListener("click", _toggleMenu);
+
+  const _removeActive = () => {
+    Array.from(DOM.groupButtons).forEach(button => {
+      button.classList.remove("active");
+    });
+  };
+
+  const _setActive = (target) => {
+    target.classList.add("active");
+  };
+
+  Array.from(DOM.groupButtons).forEach(button => {
+    button.addEventListener("click", () => {
+      _removeActive();
+      _setActive(button);
+    });
+  });
 })();
 
+document.querySelector(".task-item").addEventListener("keyup", (e) => {
+  if (e.key === "Tab") {
+    console.log(e.target);
+    console.log(e.currentTarget.children[2].textContent)
+  }
 
-Array.from(document.querySelectorAll(".todo-header label")).forEach(checkbox => {
-  checkbox.addEventListener("click", (e) => {
-    console.log(document.querySelector(".selected-group").textContent + " " + e.currentTarget.children[1].textContent);
-  });
-});
+})
