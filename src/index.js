@@ -2,7 +2,7 @@
 
 import './style.css';
 import {displayOptions, accessibilityOptions} from "./site-settings";
-import {warningModal} from "./modals";
+import {warningModal, taskModal} from "./modals";
 import {visibility} from "./menu";
 
 
