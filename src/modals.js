@@ -51,7 +51,6 @@ const warningModal = (() => {
 
   const _onLoad = () => {
     if (localStorage.length === 0) {
-      DOM.modalBox.style.display = "flex";
       DOM.modalContainer.style.display = "flex";
       render();
     };

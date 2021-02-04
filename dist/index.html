@@ -18,6 +18,30 @@
   <body>
     <div class="modal-container">
       <div class="modal-box">
+        <button type="button" class="modal-close-button close-btn animated focusable" aria-label="Close task groups menu"></button>
+        <form>
+          <fieldset>
+            <legend>Add a new task</legend>
+            <label for="name">Task name (required)</label>
+            <input type="text" id="name" class="focusable" name="name">
+            <label for="group">Group</label><br>
+            <select id="group" class="focusable">
+              <option>Normal</option>
+              <option>Important</option>
+            </select><br>
+            <label for="priority">Priority</label><br>
+            <select id="priority" class="focusable">
+              <option>Normal</option>
+              <option>Important</option>
+            </select><br>
+            <label for="date">Due Date</label><br>
+            <input type="date" id="date" class="focusable">
+            <div>
+              <input type="submit" class="add-single-btn primary-btn submit" value="Add One">
+              <input type="submit" class="add-multi-btn primary-btn submit" value="Add Many">
+            </div>
+          </fieldset>
+        </form>
         <!-- <h1>This site uses animation effects.</h1>
         <p>Effects include moving menus and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.</p>
         
@@ -50,7 +74,7 @@
         Add Task
       </button>
       <nav id="main-nav" class="animated">
-        <button type="button" class="menu-close-button animated focusable" aria-label="Close task groups menu"></button>
+        <button type="button" class="menu-close-button close-btn animated focusable" aria-label="Close task groups menu"></button>
         <div class="default-groups-container groups-container">
           <button class="focusable default-group group-btn active" aria-label="Task group: important">Important</button>
           <button class="focusable default-group group-btn" aria-label="Task group: Next seven days">Next 7 Days</button>
@@ -93,7 +117,7 @@
             <span class="material-icons">priority_high</span>
           </span>
           <span role="checkbox" aria-checked="false" class="task-status focusable" tabindex="0" aria-label="Do the dishes" style="background-image: url('assets/images/icons/done-black-24dp.svg');"></span>
-          <span class="task-name focusable" tabindex="0" arial-label="Toggle details for task Do the dishes">Do the dishes</span>
+          <span class="task-name focusable" tabindex="0" arial-label="Toggle details for task Do the dishes">Walk dog</span>
           <span class="task-date" aria-label="Due date for task Do the dishes:">Today</span>
           <div class="task-details">
             <p class="task-notes">Buy the following: Buy the following Buy the following</p>
