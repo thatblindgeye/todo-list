@@ -2,21 +2,17 @@ import {accessibilityOptions, settings} from "./site-settings";
 
 const DOM = (() => {
   const addTaskBtn = document.querySelector(".add-task-button");
-  const editTaskBtns = document.querySelectorAll(".edit-btn");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
 
-  
-
   return {
     addTaskBtn,
-    editTaskBtns,
     modalBox,
     modalContainer
   }
 })();
 
-const modal = (() => {
+const generalModal = (() => {
   const close = () => {
     for (let i = 0; i < DOM.modalBox.children.length; i++) {
       DOM.modalBox.removeChild(DOM.modalBox.lastChild);
@@ -29,9 +25,15 @@ const modal = (() => {
     closeBtn.setAttribute("type", "button");
     closeBtn.setAttribute("aria-label", "Close modal");
     closeBtn.classList.add("modal-close-button", "close-btn", "focusable");
-    closeBtn.addEventListener("click", modal.close);
+    closeBtn.addEventListener("click", generalModal.close);
     DOM.modalBox.appendChild(closeBtn);
   };
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      close();
+    };
+  });
 
   return {
     close,
@@ -59,7 +61,7 @@ const warningModal = (() => {
     disableButton.addEventListener("click", () => {
       accessibilityOptions.animationsDisabled();
       settings.saveToLocal();
-      modal.close();
+      generalModal.close();
     });
     
     continueButton.setAttribute("type", "button");
@@ -68,7 +70,7 @@ const warningModal = (() => {
     continueButton.addEventListener("click", () => {
       accessibilityOptions.animationsEnabled();
       settings.saveToLocal();
-      modal.close();
+      generalModal.close();
     });
 
     DOM.modalBox.appendChild(heading);
@@ -78,26 +80,18 @@ const warningModal = (() => {
     DOM.modalBox.appendChild(continueButton);
   };
 
-  const _onLoad = () => {
+  const _warningOnLoad = () => {
     if (localStorage.length === 0) {
       DOM.modalContainer.style.display = "flex";
       render();
     };
   };
 
-  window.addEventListener("load", _onLoad);
+  window.addEventListener("load", _warningOnLoad);
 })();
 
 const projectModal = (() => {
-  const renderNew = () => {
-
-  };
-
-  const renderEdit = () => {
-
-  };
-
-  const renderOptions = () => {
+  const render = () => {
 
   };
 })();
@@ -126,7 +120,7 @@ const taskModal = (() => {
 
     const div = document.createElement("div");
 
-    modal.createCloseBtn();
+    generalModal.createCloseBtn();
 
     nameLabel.setAttribute("for", "name-input");
     nameLabel.textContent = "Task name (required)";
@@ -179,7 +173,7 @@ const taskModal = (() => {
       addManyBtn.setAttribute("type", "submit");
       addManyBtn.setAttribute("value", "ADD MANY");
       addManyBtn.setAttribute("aria-label", "Add task and keep modal open");
-      addManyBtn.classList.add("add-many-btn", "primary-btn", "submit", "focusable");
+      addManyBtn.classList.add("add-many-btn", "secondary-btn", "submit", "focusable");
 
       div.appendChild(addOneBtn);
       div.appendChild(addManyBtn);
@@ -187,6 +181,7 @@ const taskModal = (() => {
       const editBtn = document.createElement("input");
 
       legend.textContent = "Edit task";
+      nameInput.value = "test";
 
       editBtn.setAttribute("type", "submit");
       editBtn.setAttribute("value", "UPDATE");
@@ -222,7 +217,6 @@ const taskModal = (() => {
     render(e);
     document.querySelector(".modal-close-button").focus();
   });
-
   // Array.from(DOM.editTaskBtns).forEach(button => {
   //   button.addEventListener("click", (e) => {
   //     DOM.modalContainer.style.display = "flex";
@@ -230,6 +224,8 @@ const taskModal = (() => {
   //     document.querySelector(".modal-close-button").focus();
   //   });
   // });
+
+  return {render}
 })();
 
 export {warningModal, taskModal}

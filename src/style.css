@@ -23,9 +23,10 @@
     --background-display-bar: rgb(61, 60, 50);
     --background-menu: rgb(39, 39, 39);
     --background-menu-hover: rgb(51, 51, 51);
-    --background-modal: rgb(54, 54, 54);
+    --background-modal: rgb(44, 44, 44);
     --background-delete-btn: rgb(54, 54, 54);
     --background-delete-hover: rgb(207, 102, 121);
+    --background-inputs: rgb(56, 56, 56);
   /* elevation refs */
     --elevation-00dp: rgb(18, 18, 18); /* text btn, top app bar (rest), */
     --elevation-01dp: rgb(30, 30, 30); /* searchbar (rest), card (rest), switch */
@@ -42,6 +43,7 @@
     --inverted-text:  rgb(0, 0, 0, 0.87); 
   /* borders */
     --border-primary: rgb(240, 240, 240);
+    --input-border: rgb(160, 160, 160);
     --focus: 2px dotted rgb(224, 224, 224);
     --task-separator: 2px solid rgb(39, 39, 39);
     --button-border: rgb(100, 100, 100);
@@ -68,11 +70,13 @@
     --background-modal: rgb(220, 220, 220);
     --background-delete-btn: rgb(220, 220, 220);
     --background-delete-hover: rgb(148, 0, 27);
+    --background-inputs: rgb(240, 240, 240);
   /* text */
     --primary-text: rgb(0, 0, 0, 0.87);
     --inverted-text:  rgb(255, 255, 255, 0.87);
   /* borders */
     --border-primary: rgb(18, 18, 18);
+    --input-border: rgb(60, 60, 60);
     --focus: 2px dotted rgb(30, 30, 30);
     --task-separator: 2px solid rgb(200, 200, 200);
     --button-border: 1px solid rgb(150, 150, 150);
@@ -190,15 +194,16 @@ input[type="submit"] {
   font-weight: bold;
 }
 
-.modal-box #name-input {
-  display: inline-block;
-  width: 100%;
-}
-
 .modal-box label {
   display: inline-block;
   margin-bottom: 5px;
   font-weight: bold;
+}
+
+.modal-box #name-input {
+  display: inline-block;
+  width: 100%;
+  padding: 5px;
 }
 
 .modal-box #name-input,
@@ -206,6 +211,8 @@ input[type="submit"] {
 .modal-box select {
   height: 2.5rem;
   margin-bottom: 30px;
+  background-color: var(--background-inputs);
+  color: var(--primary-text);
 }
 
 .modal-box select,
@@ -217,13 +224,15 @@ input[type="submit"] {
   width: 100%;
   height: 75px;
   padding: 5px;
+  background-color: var(--background-inputs);
+  color: var(--primary-text);
   resize: vertical;
 }
 
 .modal-box input,
 .modal-box select,
 .modal-box textarea {
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--input-border);
 }
 
 .modal-box div {
@@ -498,7 +507,12 @@ input[type="submit"] {
 }
 
 .task-container-header {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: start;
   margin-bottom: 25px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .group-options-btn {
@@ -508,6 +522,7 @@ input[type="submit"] {
   color: var(--primary-text);
   opacity: 0.8;
   border: none;
+  font-size: 30px;
 }
 
 .group-options-btn:hover,
@@ -559,6 +574,10 @@ input[type="submit"] {
 .task-name {
   grid-area: name;
   margin-left: 10px;
+  padding: 0;
+  background-color: transparent;
+  color: var(--primary-text);
+  border: none;
   font-size: 1.05rem;
 }
 
@@ -571,9 +590,12 @@ input[type="submit"] {
 }
 
 .task-details {
-  display: flex;
+  visibility: hidden;
   flex-wrap: wrap;
   grid-area: details;
+  height: 0;
+  /* use scrollheight in JS for transition effect? */
+  overflow: hidden;
 }
 
 .task-details p {
