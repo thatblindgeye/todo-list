@@ -113,7 +113,10 @@ span[role="button"],
 /* ========== MODALS ========== */
 .modal-container {
   z-index: 3;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
@@ -148,7 +151,7 @@ span[role="button"],
   width: 90vw;
   max-width: 500px;
   max-height: 75vh;
-  padding: 30px 5px 15px;
+  padding: 30px 15px;
   border-radius: 15px;
   background-color: var(--background-modal);
   color: var(--primary-text);
@@ -168,8 +171,10 @@ span[role="button"],
 
 .modal-box button,
 .modal-box .submit {
-  padding: 10px 15px;
+  padding: 10px;
   opacity: 0.8;
+  -webkit-transition: padding 0.3s;
+  transition: padding 0.3s;
 }
 
 .modal-box button:hover,
@@ -245,8 +250,8 @@ span[role="button"],
   margin-top: 25px;
 }
 
-.modal-box .submit:first-of-type {
-  margin-right: 20px;
+.modal-box .submit {
+  margin: 20px 5px 0;
 }
 
 .close-btn {
@@ -750,6 +755,16 @@ span[role="button"],
 
 /* ========== MEDIA QUERIES ========== */
 @media only screen and (min-width: 430px) {
+  .modal-box button,
+  .modal-box .submit {
+    padding: 10px 20px;
+    opacity: 0.8;
+  }
+
+  .modal-box .submit {
+    margin: 20px 15px 0;
+  }
+
   #accessibility-contents {
     -webkit-justify-content: space-around;
         -ms-flex-pack: distribute;
