@@ -95,12 +95,14 @@
 body {
   min-height: 100vh;
   background: var(--background-base);
+  letter-spacing: 1px;
 }
 
 button:hover,
 span[role="checkbox"],
 span[role="button"],
-.submit {
+div[role="switch"],
+input[type="submit"] {
   cursor: pointer;
 }
 
@@ -113,10 +115,7 @@ span[role="button"],
 /* ========== MODALS ========== */
 .modal-container {
   z-index: 3;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
@@ -138,7 +137,6 @@ span[role="button"],
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  position: relative;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -148,11 +146,10 @@ span[role="button"],
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 90vw;
-  max-width: 500px;
-  max-height: 75vh;
+  position: relative;
+  width: 100%;
+  height: 100vh;
   padding: 30px 15px;
-  border-radius: 15px;
   background-color: var(--background-modal);
   color: var(--primary-text);
   box-shadow: 0 0 10px 2px black;
@@ -170,15 +167,18 @@ span[role="button"],
 }
 
 .modal-box button,
-.modal-box .submit {
+.modal-box input[type="submit"] {
   padding: 10px;
   opacity: 0.8;
+  font-weight: bolder;
   -webkit-transition: padding 0.3s;
   transition: padding 0.3s;
 }
 
 .modal-box button:hover,
-.modal-box button:focus {
+.modal-box button:focus,
+.modal-box input[type="submit"]:hover,
+.modal-box input[type="submit"]:focus {
   opacity: 1;
 }
 
@@ -188,7 +188,6 @@ span[role="button"],
   color: var(--text-black-high);
   border: 2px outset black;
   border-radius: 10px;
-  font-weight: bold;
 }
 
 .modal-box .secondary-btn {
@@ -198,7 +197,10 @@ span[role="button"],
 }
 
 .modal-box fieldset {
-  border: none;
+  border-color: var(--border-primary);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
 }
 
 .modal-box legend {
@@ -207,7 +209,7 @@ span[role="button"],
   font-weight: bold;
 }
 
-.modal-box input[id="name"] {
+.modal-box #name-input {
   display: inline-block;
   width: 100%;
 }
@@ -218,21 +220,29 @@ span[role="button"],
   font-weight: bold;
 }
 
-.modal-box input[id="name"],
+.modal-box #name-input,
+.modal-box #date-select,
 .modal-box select {
-  height: 2rem;
+  height: 2.5rem;
   margin-bottom: 30px;
 }
 
-.modal-box select {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+.modal-box select,
+.modal-box input[type="date"] {
+  min-width: 150px;
 }
 
-.modal-box input[id="date"] {
-  height: 2rem;
+.modal-box textarea {
+  width: 100%;
+  height: 75px;
   padding: 5px;
+  resize: vertical;
+}
+
+.modal-box input,
+.modal-box select,
+.modal-box textarea {
+  border: 1px solid var(--border-primary);
 }
 
 .modal-box div {
@@ -265,17 +275,6 @@ span[role="button"],
   background-position: center;
   border: none;
   opacity: 0.75;
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s;
-}
-
-.close-btn:hover {
-  cursor: pointer;
-  -webkit-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-          transform: rotate(90deg);
 }
 
 .close-btn:hover,
@@ -357,10 +356,10 @@ span[role="button"],
   font-weight: bold;
 }
 
-#theme-switch:hover,
+/* #theme-switch:hover,
 #animation-switch:hover {
   cursor: pointer;
-}
+} */
 
 #accessibility-label {
   z-index: 2;
@@ -471,12 +470,6 @@ span[role="button"],
   vertical-align: middle;
 }
 
-/* .menu-close-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-} */
-
 #main-nav {
   z-index: 1;
   visibility: hidden;
@@ -527,6 +520,7 @@ span[role="button"],
   font-size: 1.25rem;
   font-weight: bold;
   text-align: left;
+  letter-spacing: 1px;
 }
 
 .groups-container button:hover,
@@ -610,7 +604,7 @@ span[role="button"],
       -ms-flex-align: start;
           align-items: start;
   width: 100%;
-  padding: 10px;
+  padding: 20px 10px;
   color: var(--primary-text);
 }
 
@@ -643,6 +637,7 @@ span[role="button"],
 .task-name {
   grid-area: name;
   margin-left: 10px;
+  font-size: 1.05rem;
 }
 
 .task-name:hover {
@@ -666,6 +661,9 @@ span[role="button"],
 
 .task-details p {
   width: 100%;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.5;
 }
 
 .task-details button {
@@ -682,12 +680,20 @@ span[role="button"],
 .edit-btn,
 .delete-btn {
   padding: 5px 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .edit-btn {
   background-color: transparent;
   color: var(--primary-text);
   border: none;
+  opacity: 0.8;
+}
+
+.edit-btn:hover,
+.edit-btn:focus {
+  opacity: 1;
 }
 
 .delete-btn {
@@ -695,8 +701,6 @@ span[role="button"],
   color: var(--primary-text);
   border: var(--button-border);
   border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: bold;
 }
 
 .delete-btn:hover,
@@ -775,6 +779,13 @@ span[role="button"],
 @media only screen and (min-width: 764px) {
   :root {
     background-color: var(--background-base);
+  }
+
+  .modal-box {
+    max-width: 500px;
+    height: initial;
+    max-height: 90vh;
+    border-radius: 15px;
   }
 
   #accessibility-container {
