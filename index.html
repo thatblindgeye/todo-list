@@ -10,7 +10,7 @@
     <link rel="icon" 
           href="/dist/assets/images/logos/thatblindgeye-favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style-prefixed.css">
@@ -65,7 +65,7 @@
       <article class="task-container">
         <div class="task-container-header">
           <h1 class="selected-group">Important</h1>
-          <span role="button" class="material-icons focusable group-options-btn" aria-label="View group options" tabindex="0">more_horiz</span>
+          <button type="button" class="material-icons focusable group-options-btn" aria-label="View group options" tabindex="0">more_horiz</button>
         </div>
         
         <section class="task-item" data-project="chores">
@@ -73,9 +73,9 @@
             <span class="material-icons">priority_high</span>
           </span>
           <span role="checkbox" aria-checked="false" class="task-status focusable" tabindex="0" aria-label="Do the dishes" style="background-image: none;"></span>
-          <span class="task-name focusable" tabindex="0" arial-label="Toggle details for task Do the dishes">Do the dishes</span>
+          <button role="button" class="task-name focusable" tabindex="0" arial-label="Details for task Do the dishes">Do the dishes</button>
           <span class="task-date" aria-label="Due date for task Do the dishes: Today">Today</span>
-          <div class="task-details">
+          <div class="task-details animated">
             <p class="task-notes">Buy the following: Buy the following Buy the following</p>
             <button type="button" class="edit-btn focusable" aria-label="Edit task Do the dishes">EDIT</button>
             <button type="button" class="delete-btn focusable" aria-label="Delete task Do the dishes">DELETE</button>
