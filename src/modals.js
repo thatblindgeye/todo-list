@@ -4,11 +4,15 @@ const DOM = (() => {
   const addTaskBtn = document.querySelector(".add-task-button");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
+  const selectedGroup = document.querySelector(".selected-group");
+  const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
 
   return {
     addTaskBtn,
+    defaultGroups,
     modalBox,
-    modalContainer
+    modalContainer,
+    selectedGroup
   }
 })();
 
@@ -91,9 +95,73 @@ const warningModal = (() => {
 })();
 
 const projectModal = (() => {
-  const render = () => {
+  const render = (e) => {
+    const form = document.createElement("form");
+    const fieldset = document.createElement("fieldset");
+    const legend = document.createElement("legend");
+    const nameLabel = document.createElement("label");
+    const nameInput = document.createElement("input");
+    const mainBtn = document.createElement("input");
+    const div = document.createElement("div");
 
+    generalModal.createCloseBtn();
+
+    nameLabel.setAttribute("for", "name-input");
+    nameLabel.textContent = "Group Name";
+    nameInput.setAttribute("type", "text");
+    nameInput.setAttribute("required", "true");
+    nameInput.setAttribute("id", "name-input")
+    nameInput.classList.add("focusable");
+
+    if (e.target.textContent.includes ("ADD GROUP")) {
+      legend.textContent = "Add a Group";
+      mainBtn.setAttribute("type", "submit");
+      mainBtn.setAttribute("value", "ADD GROUP");
+      mainBtn.classList.add("add-group-btn", "primary-btn", "focusable", "submit");
+      div.appendChild(mainBtn);
+    } else {
+      legend.textContent = "Group Options";
+      mainBtn.setAttribute("type", "submit");
+      mainBtn.setAttribute("value", "UPDATE");
+      mainBtn.classList.add("update-group-btn", "secondary-btn", "focusable", "submit");
+
+      const deleteGroup = document.createElement("button");
+      const deleteCompleted = document.createElement("button");
+      deleteGroup.setAttribute("type", "button");
+      deleteGroup.classList.add("delete-group-btn", "delete-btn", "focusable");
+      deleteGroup.textContent = "DELETE GROUP";
+      deleteCompleted.setAttribute("type", "button");
+      deleteCompleted.classList.add("delete-completed-btn", "delete-btn", "focusable");
+      deleteCompleted.textContent = "DELETE COMPLETED TASKS";
+
+      if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) !== -1) {
+        nameLabel.style.opacity = "0.38";
+        nameInput.setAttribute("disabled", "true");
+        nameInput.style.opacity = "0.38";
+        mainBtn.setAttribute("disabled", "true");
+        mainBtn.style.opacity = "0.38";
+        deleteGroup.setAttribute("disabled", "true");
+        deleteGroup.style.opacity = "0.38";
+      };
+
+      div.appendChild(mainBtn);
+      div.appendChild(deleteGroup);
+      div.appendChild(deleteCompleted);
+    };
+
+    fieldset.appendChild(legend);
+    fieldset.appendChild(nameLabel);
+    fieldset.appendChild(nameInput);
+    fieldset.appendChild(div);
+    form.appendChild(fieldset);
+    DOM.modalBox.appendChild(form);
   };
+
+  document.querySelector(".group-options-btn").addEventListener("click", (e) => {
+    DOM.modalContainer.style.display = "flex";
+    render(e);
+    document.querySelector(".modal-close-button").focus();
+  });
 })();
 
 const taskModal = (() => {
@@ -123,10 +191,9 @@ const taskModal = (() => {
     generalModal.createCloseBtn();
 
     nameLabel.setAttribute("for", "name-input");
-    nameLabel.textContent = "Task name (required)";
+    nameLabel.textContent = "Task Name (required)";
     nameInput.setAttribute("type", "text");
     nameInput.setAttribute("id", "name-input");
-    nameInput.setAttribute("name", "name-input");
     nameInput.setAttribute("placeholder", "Enter a task name");
     nameInput.setAttribute("required", "true");
     nameInput.className = "focusable";
@@ -134,13 +201,11 @@ const taskModal = (() => {
     groupLabel.setAttribute("for", "group-select");
     groupLabel.textContent = "Group";
     groupSelect.setAttribute("id", "group-select");
-    groupSelect.setAttribute("name", "group-select");
     groupSelect.className = "focusable";
     
     priorityLabel.setAttribute("for", "priority-select");
     priorityLabel.textContent = "Priority";
     prioritySelect.setAttribute("id", "priority-select");
-    prioritySelect.setAttribute("name", "priority-select");
     prioritySelect.className = "focusable";
     priorityOption1.textContent = "Normal";
     priorityOption2.textContent = "Important";
@@ -163,7 +228,7 @@ const taskModal = (() => {
       const addOneBtn = document.createElement("input");
       const addManyBtn = document.createElement("input");
 
-      legend.textContent = "Add a new task";
+      legend.textContent = "Add a Task";
 
       addOneBtn.setAttribute("type", "submit");
       addOneBtn.setAttribute("value", "ADD ONE");
@@ -177,11 +242,10 @@ const taskModal = (() => {
 
       div.appendChild(addOneBtn);
       div.appendChild(addManyBtn);
-    } else if (e.target.textContent.includes("EDIT")) {
+    } else if (e.target.textContent === ("EDIT")) {
       const editBtn = document.createElement("input");
 
-      legend.textContent = "Edit task";
-      nameInput.value = "test";
+      legend.textContent = "Edit Task";
 
       editBtn.setAttribute("type", "submit");
       editBtn.setAttribute("value", "UPDATE");
@@ -217,7 +281,8 @@ const taskModal = (() => {
     render(e);
     document.querySelector(".modal-close-button").focus();
   });
-  // Array.from(DOM.editTaskBtns).forEach(button => {
+
+  // Array.from(document.querySelectorAll(".edit-btn")).forEach(button => {
   //   button.addEventListener("click", (e) => {
   //     DOM.modalContainer.style.display = "flex";
   //     render(e);
@@ -228,4 +293,4 @@ const taskModal = (() => {
   return {render}
 })();
 
-export {warningModal, taskModal}
+export {warningModal, projectModal, taskModal}
