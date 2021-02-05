@@ -273,6 +273,12 @@ input[type="submit"] {
   margin: 20px 5px 0;
 }
 
+.modal-box .delete-group-btn,
+
+.modal-box .delete-completed-btn {
+  margin: 20px 10px 0;
+}
+
 .close-btn {
   position: absolute;
   top: 10px;
@@ -539,7 +545,7 @@ input[type="submit"] {
 }
 
 .default-groups-container {
-  margin: 45px 0 25px;
+  margin: 45px 0 20px;
 }
 
 .custom-groups-container {
@@ -677,6 +683,7 @@ input[type="submit"] {
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
   grid-area: details;
+  padding: 0 0 10px 10px;
   height: 0;
   /* use scrollheight in JS for transition effect? */
   overflow: hidden;
@@ -684,16 +691,10 @@ input[type="submit"] {
 
 .task-details p {
   width: 100%;
+  margin-bottom: 50px;
   font-size: 0.95rem;
   font-style: italic;
   line-height: 1.5;
-}
-
-.task-details button {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-  margin-top: 10px;
 }
 
 .task-details .edit-btn {
@@ -702,7 +703,7 @@ input[type="submit"] {
 
 .edit-btn,
 .delete-btn {
-  padding: 5px 15px;
+  padding: 8px 15px;
   font-size: 1.1rem;
   font-weight: bold;
 }
