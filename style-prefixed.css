@@ -552,7 +552,7 @@ input[type="submit"] {
   padding-bottom: 1.5rem;
 }
 
-.custom-groups-container .add-group-button {
+.add-group-button {
   padding: 10px 5px;
   font-size: 1.3rem;
 }
@@ -598,7 +598,7 @@ input[type="submit"] {
   border-bottom: 1px solid var(--border-primary);
 }
 
-.group-options-btn {
+.group-option-btn {
   margin-top: 5px;
   padding: 0;
   background-color: transparent;
@@ -608,8 +608,8 @@ input[type="submit"] {
   font-size: 30px;
 }
 
-.group-options-btn:hover,
-.group-options-btn:focus {
+.group-option-btn:hover,
+.group-option-btn:focus {
   opacity: 1;
 }
 
@@ -678,13 +678,15 @@ input[type="submit"] {
 }
 
 .task-details {
-  visibility: hidden;
+  visibility: visible;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
   grid-area: details;
   padding: 0 0 10px 10px;
-  height: 0;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
   /* use scrollheight in JS for transition effect? */
   overflow: hidden;
 }
