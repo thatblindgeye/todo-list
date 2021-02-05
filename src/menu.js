@@ -46,7 +46,7 @@ const visibility = (() => {
   DOM.menuCloseButton.addEventListener("click", _toggleMenu);
 })();
 
-const groupButtons = (() => {
+const activeGroup = (() => {
   const _removeActive = () => {
     Array.from(DOM.groupButtons).forEach(button => {
       button.classList.remove("active");
@@ -65,4 +65,4 @@ const groupButtons = (() => {
   });
 })();
 
-export {visibility, groupButtons}
+export {visibility, activeGroup}

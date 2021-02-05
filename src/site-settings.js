@@ -31,7 +31,7 @@ const settings = (() => {
 })();
 
 const displayOptions = (() => {
-  const _themeOnLoad = () => {
+  const _onLoad = () => {
     if (localStorage.getItem("theme") === "light") {
       _lightTheme();
     } else {
@@ -72,11 +72,11 @@ const displayOptions = (() => {
     };
   });
 
-  window.addEventListener("load", _themeOnLoad);
+  window.addEventListener("load", _onLoad);
 })();
 
 const accessibilityOptions = (() => {
-  const _animationsOnLoad = () => {
+  const _onLoad = () => {
     if (localStorage.getItem("animations-enabled") === "false") {
       animationsDisabled();
     } else {
@@ -126,9 +126,12 @@ const accessibilityOptions = (() => {
     };
   });
   
-  window.addEventListener("load", _animationsOnLoad);
+  window.addEventListener("load", _onLoad);
 
-  return {animationsEnabled, animationsDisabled}
+  return {
+    animationsEnabled,
+    animationsDisabled
+  }
 })();
 
-export {displayOptions, accessibilityOptions, settings}
+export {accessibilityOptions, displayOptions, settings}

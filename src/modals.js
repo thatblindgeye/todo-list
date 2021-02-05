@@ -1,15 +1,20 @@
 import {accessibilityOptions, settings} from "./site-settings";
+import {group} from "./logic";
 
 const DOM = (() => {
+  const addGroupBtn = document.querySelector(".add-group-button");
   const addTaskBtn = document.querySelector(".add-task-button");
+  const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
+  const groupOptionBtn = document.querySelector(".group-option-btn");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
   const selectedGroup = document.querySelector(".selected-group");
-  const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
 
   return {
+    addGroupBtn,
     addTaskBtn,
     defaultGroups,
+    groupOptionBtn,
     modalBox,
     modalContainer,
     selectedGroup
@@ -18,8 +23,8 @@ const DOM = (() => {
 
 const generalModal = (() => {
   const close = () => {
-    for (let i = 0; i < DOM.modalBox.children.length; i++) {
-      DOM.modalBox.removeChild(DOM.modalBox.lastChild);
+    while (DOM.modalBox.firstChild) {
+      DOM.modalBox.removeChild(DOM.modalBox.firstChild)
     };
     DOM.modalContainer.style.display = "none";
   };
@@ -46,12 +51,22 @@ const generalModal = (() => {
 })();
 
 const warningModal = (() => {
+  const _selectOption = (e) => {
+    if (e.target.textContent.includes("DISABLE")) {
+      accessibilityOptions.animationsDisabled();
+    } else if (e.target.textContent.includes("ENABLE")) {
+      accessibilityOptions.animationsEnabled();
+    };
+    settings.saveToLocal();
+    generalModal.close();
+  };
+
   const _render = () => {
     const heading = document.createElement("h1");
     const para1 = document.createElement("p");
     const para2 = document.createElement("p");
     const disableButton = document.createElement("button");
-    const continueButton = document.createElement("button");
+    const enableButton = document.createElement("button");
 
     heading.textContent = "This site uses minimal animation effects.";
 
@@ -61,48 +76,42 @@ const warningModal = (() => {
   
     disableButton.setAttribute("type", "button");
     disableButton.classList.add("disable-button", "focusable", "primary-btn");
-    disableButton.textContent = "Disable Animations";
-    disableButton.addEventListener("click", () => {
-      accessibilityOptions.animationsDisabled();
-      settings.saveToLocal();
-      generalModal.close();
-    });
+    disableButton.textContent = "DISABLE ANIMATIONS";
+    disableButton.addEventListener("click", _selectOption);
     
-    continueButton.setAttribute("type", "button");
-    continueButton.classList.add("continue-button", "focusable", "secondary-btn");
-    continueButton.textContent = "Continue with Animations";
-    continueButton.addEventListener("click", () => {
-      accessibilityOptions.animationsEnabled();
-      settings.saveToLocal();
-      generalModal.close();
-    });
+    enableButton.setAttribute("type", "button");
+    enableButton.classList.add("continue-button", "focusable", "secondary-btn");
+    enableButton.textContent = "ENABLE ANIMATIONS";
+    enableButton.addEventListener("click", _selectOption);
 
     DOM.modalBox.appendChild(heading);
     DOM.modalBox.appendChild(para1);
     DOM.modalBox.appendChild(para2);
     DOM.modalBox.appendChild(disableButton);
-    DOM.modalBox.appendChild(continueButton);
+    DOM.modalBox.appendChild(enableButton);
+
+    DOM.modalContainer.style.display = "flex";
   };
 
-  const _warningOnLoad = () => {
+  const _onLoad = () => {
     if (localStorage.length === 0) {
-      DOM.modalContainer.style.display = "flex";
       _render();
     };
   };
 
-  window.addEventListener("load", _warningOnLoad);
+  window.addEventListener("load", _onLoad);
 })();
 
-const projectModal = (() => {
-  const render = (e) => {
+const groupModal = (() => {
+  const _render = (e) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
+    const div = document.createElement("div");
+
     const nameLabel = document.createElement("label");
     const nameInput = document.createElement("input");
     const mainBtn = document.createElement("input");
-    const div = document.createElement("div");
 
     generalModal.createCloseBtn();
 
@@ -110,26 +119,56 @@ const projectModal = (() => {
     nameLabel.textContent = "Group Name";
     nameInput.setAttribute("type", "text");
     nameInput.setAttribute("required", "true");
-    nameInput.setAttribute("id", "name-input")
+    nameInput.setAttribute("id", "name-input");
     nameInput.classList.add("focusable");
 
     if (e.target.textContent.includes ("ADD GROUP")) {
       legend.textContent = "Add a Group";
       mainBtn.setAttribute("type", "submit");
       mainBtn.setAttribute("value", "ADD GROUP");
-      mainBtn.classList.add("add-group-btn", "primary-btn", "focusable", "submit");
+      mainBtn.classList.add("submit-group-btn", "primary-btn", "focusable", "submit");
+
+      mainBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (group.checkForGroup(nameInput.value, DOM.defaultGroups)) {
+          alert("Name is already taken. Please select a new name.");
+          return;
+        } else {
+          group.create(nameInput.value);
+          generalModal.close();
+        };
+      });
+
       div.appendChild(mainBtn);
     } else {
+      const deleteGroup = document.createElement("button");
+      const deleteCompleted = document.createElement("button");
+
       legend.textContent = "Group Options";
       mainBtn.setAttribute("type", "submit");
       mainBtn.setAttribute("value", "UPDATE");
       mainBtn.classList.add("update-group-btn", "secondary-btn", "focusable", "submit");
+      
+      mainBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (group.checkForGroup(nameInput.value, DOM.defaultGroups)) {
+          alert("Name is already taken. Please select a new name.");
+          return;
+        } else {
+          group.update(DOM.selectedGroup.textContent, nameInput.value);
+          generalModal.close();
+        };
+      });
 
-      const deleteGroup = document.createElement("button");
-      const deleteCompleted = document.createElement("button");
       deleteGroup.setAttribute("type", "button");
       deleteGroup.classList.add("delete-group-btn", "delete-btn", "focusable");
       deleteGroup.textContent = "DELETE GROUP";
+      deleteGroup.addEventListener("click", () => {
+        group.remove(DOM.selectedGroup.textContent);
+
+        generalModal.close();
+      });
+
       deleteCompleted.setAttribute("type", "button");
       deleteCompleted.classList.add("delete-completed-btn", "delete-btn", "focusable");
       deleteCompleted.textContent = "DELETE COMPLETED TASKS";
@@ -155,22 +194,21 @@ const projectModal = (() => {
     fieldset.appendChild(div);
     form.appendChild(fieldset);
     DOM.modalBox.appendChild(form);
+
+    DOM.modalContainer.style.display = "flex";
+    document.querySelector(".modal-close-button").focus();
   };
 
-  document.querySelector(".group-options-btn").addEventListener("click", (e) => {
-    DOM.modalContainer.style.display = "flex";
-    render(e);
-    document.querySelector(".modal-close-button").focus();
-  });
-
-  return {render}
+  DOM.groupOptionBtn.addEventListener("click", _render);
+  DOM.addGroupBtn.addEventListener("click", _render);
 })();
 
 const taskModal = (() => {
-  const render = (e) => {
+  const _render = (e) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
+    const div = document.createElement("div");
 
     const nameLabel = document.createElement("label");
     const nameInput = document.createElement("input");
@@ -187,8 +225,6 @@ const taskModal = (() => {
     const dateInput = document.createElement("input");
     const notesLabel = document.createElement("label");
     const notesInput = document.createElement("textarea");
-
-    const div = document.createElement("div");
 
     generalModal.createCloseBtn();
 
@@ -226,7 +262,7 @@ const taskModal = (() => {
     notesInput.setAttribute("placeholder", "Enter any additional notes for the task");
     notesInput.className = "focusable";
 
-    if (e.target.textContent.includes("ADD")) {
+    if (e.target.textContent.includes("ADD TASK")) {
       const addOneBtn = document.createElement("input");
       const addManyBtn = document.createElement("input");
 
@@ -276,23 +312,12 @@ const taskModal = (() => {
     fieldset.appendChild(div);
     form.appendChild(fieldset);
     DOM.modalBox.appendChild(form);
+
+    DOM.modalContainer.style.display = "flex";
+    document.querySelector(".modal-close-button").focus();
   };
 
-  DOM.addTaskBtn.addEventListener("click", (e) => {
-    DOM.modalContainer.style.display = "flex";
-    render(e);
-    document.querySelector(".modal-close-button").focus();
-  });
-
-  // Array.from(document.querySelectorAll(".edit-btn")).forEach(button => {
-  //   button.addEventListener("click", (e) => {
-  //     DOM.modalContainer.style.display = "flex";
-  //     render(e);
-  //     document.querySelector(".modal-close-button").focus();
-  //   });
-  // });
-
-  return {render}
+  DOM.addTaskBtn.addEventListener("click", _render);
 })();
 
-export {warningModal, projectModal, taskModal}
+export {generalModal, warningModal, groupModal, taskModal}
