@@ -46,7 +46,7 @@ const generalModal = (() => {
 })();
 
 const warningModal = (() => {
-  const render = () => {
+  const _render = () => {
     const heading = document.createElement("h1");
     const para1 = document.createElement("p");
     const para2 = document.createElement("p");
@@ -87,7 +87,7 @@ const warningModal = (() => {
   const _warningOnLoad = () => {
     if (localStorage.length === 0) {
       DOM.modalContainer.style.display = "flex";
-      render();
+      _render();
     };
   };
 
@@ -162,6 +162,8 @@ const projectModal = (() => {
     render(e);
     document.querySelector(".modal-close-button").focus();
   });
+
+  return {render}
 })();
 
 const taskModal = (() => {
@@ -224,7 +226,7 @@ const taskModal = (() => {
     notesInput.setAttribute("placeholder", "Enter any additional notes for the task");
     notesInput.className = "focusable";
 
-    if (e.target.textContent.includes("ADD TASK")) {
+    if (e.target.textContent.includes("ADD")) {
       const addOneBtn = document.createElement("input");
       const addManyBtn = document.createElement("input");
 
