@@ -720,7 +720,8 @@ input[type="submit"] {
   opacity: 1;
 }
 
-.delete-btn {
+.delete-btn,
+.delete-btn:disabled:hover {
   background-color: var(--background-delete-btn);
   color: var(--primary-text);
   border: var(--button-border);
