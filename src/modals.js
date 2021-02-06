@@ -1,19 +1,19 @@
 import {accessibilityOptions, settings} from "./site-settings";
-import {group} from "./logic";
 
 const DOM = (() => {
-  const addGroupBtn = document.querySelector(".add-group-button");
-  const addTaskBtn = document.querySelector(".add-task-button");
+  const addGroupBtn = document.querySelector(".add-group-btn");
+  const addTaskBtn = document.querySelector(".add-task-btn");
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
+  const groupButtons = document.getElementsByClassName("group-btn");
   const groupOptionBtn = document.querySelector(".group-option-btn");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
   const selectedGroup = document.querySelector(".selected-group");
-
   return {
     addGroupBtn,
     addTaskBtn,
     defaultGroups,
+    groupButtons,
     groupOptionBtn,
     modalBox,
     modalContainer,
@@ -22,11 +22,16 @@ const DOM = (() => {
 })();
 
 const generalModal = (() => {
-  const close = () => {
+  const onClose = () => {
     while (DOM.modalBox.firstChild) {
       DOM.modalBox.removeChild(DOM.modalBox.firstChild)
     };
     DOM.modalContainer.style.display = "none";
+  };
+
+  const onOpen = () => {
+    DOM.modalContainer.style.display = "flex";
+    document.querySelector(".modal-close-button").focus();
   };
 
   const createCloseBtn = () => {
@@ -34,31 +39,32 @@ const generalModal = (() => {
     closeBtn.setAttribute("type", "button");
     closeBtn.setAttribute("aria-label", "Close modal");
     closeBtn.classList.add("modal-close-button", "close-btn", "focusable");
-    closeBtn.addEventListener("click", generalModal.close);
+    closeBtn.addEventListener("click", generalModal.onClose);
     DOM.modalBox.appendChild(closeBtn);
   };
 
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      close();
+      onClose();
     };
   });
 
   return {
-    close,
-    createCloseBtn
+    createCloseBtn,
+    onClose,
+    onOpen
   }
 })();
 
 const warningModal = (() => {
   const _selectOption = (e) => {
-    if (e.target.textContent.includes("DISABLE")) {
+    if (e.target.classList.contains("disable-button")) {
       accessibilityOptions.animationsDisabled();
-    } else if (e.target.textContent.includes("ENABLE")) {
+    } else if (e.target.classList.contains("enable-button")) {
       accessibilityOptions.animationsEnabled();
     };
     settings.saveToLocal();
-    generalModal.close();
+    generalModal.onClose();
   };
 
   const _render = () => {
@@ -80,7 +86,7 @@ const warningModal = (() => {
     disableButton.addEventListener("click", _selectOption);
     
     enableButton.setAttribute("type", "button");
-    enableButton.classList.add("continue-button", "focusable", "secondary-btn");
+    enableButton.classList.add("enable-button", "focusable", "secondary-btn");
     enableButton.textContent = "ENABLE ANIMATIONS";
     enableButton.addEventListener("click", _selectOption);
 
@@ -122,25 +128,13 @@ const groupModal = (() => {
     nameInput.setAttribute("id", "name-input");
     nameInput.classList.add("focusable");
 
-    if (e.target.textContent.includes ("ADD GROUP")) {
+    if (e.target.classList.contains("add-group-btn")) {
       legend.textContent = "Add a Group";
       mainBtn.setAttribute("type", "submit");
       mainBtn.setAttribute("value", "ADD GROUP");
       mainBtn.classList.add("submit-group-btn", "primary-btn", "focusable", "submit");
-
-      mainBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (group.checkForGroup(nameInput.value, DOM.defaultGroups)) {
-          alert("Name is already taken. Please select a new name.");
-          return;
-        } else {
-          group.create(nameInput.value);
-          generalModal.close();
-        };
-      });
-
       div.appendChild(mainBtn);
-    } else {
+    } else if (e.target.classList.contains("group-option-btn")) {
       const deleteGroup = document.createElement("button");
       const deleteCompleted = document.createElement("button");
 
@@ -148,32 +142,15 @@ const groupModal = (() => {
       mainBtn.setAttribute("type", "submit");
       mainBtn.setAttribute("value", "UPDATE");
       mainBtn.classList.add("update-group-btn", "secondary-btn", "focusable", "submit");
-      
-      mainBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (group.checkForGroup(nameInput.value, DOM.defaultGroups)) {
-          alert("Name is already taken. Please select a new name.");
-          return;
-        } else {
-          group.update(DOM.selectedGroup.textContent, nameInput.value);
-          generalModal.close();
-        };
-      });
 
       deleteGroup.setAttribute("type", "button");
       deleteGroup.classList.add("delete-group-btn", "delete-btn", "focusable");
       deleteGroup.textContent = "DELETE GROUP";
-      deleteGroup.addEventListener("click", () => {
-        group.remove(DOM.selectedGroup.textContent);
-
-        generalModal.close();
-      });
-
       deleteCompleted.setAttribute("type", "button");
       deleteCompleted.classList.add("delete-completed-btn", "delete-btn", "focusable");
       deleteCompleted.textContent = "DELETE COMPLETED TASKS";
 
-      if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) !== -1) {
+      if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
         nameLabel.style.opacity = "0.38";
         nameInput.setAttribute("disabled", "true");
         nameInput.style.opacity = "0.38";
@@ -194,13 +171,17 @@ const groupModal = (() => {
     fieldset.appendChild(div);
     form.appendChild(fieldset);
     DOM.modalBox.appendChild(form);
-
-    DOM.modalContainer.style.display = "flex";
-    document.querySelector(".modal-close-button").focus();
   };
 
-  DOM.groupOptionBtn.addEventListener("click", _render);
-  DOM.addGroupBtn.addEventListener("click", _render);
+  DOM.groupOptionBtn.addEventListener("click", (e) => {
+    _render(e);
+    generalModal.onOpen();
+  });
+
+  DOM.addGroupBtn.addEventListener("click", (e) => {
+    _render(e);
+    generalModal.onOpen();
+  });
 })();
 
 const taskModal = (() => {
@@ -312,12 +293,12 @@ const taskModal = (() => {
     fieldset.appendChild(div);
     form.appendChild(fieldset);
     DOM.modalBox.appendChild(form);
-
-    DOM.modalContainer.style.display = "flex";
-    document.querySelector(".modal-close-button").focus();
   };
 
-  DOM.addTaskBtn.addEventListener("click", _render);
+  DOM.addTaskBtn.addEventListener("click", (e) => {
+    _render(e);
+    generalModal.onOpen();
+  });
 })();
 
 export {generalModal, warningModal, groupModal, taskModal}

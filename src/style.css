@@ -55,7 +55,7 @@
     --theme-toggle-icon: url("/dist/assets/images/icons/wb_sunny-white-24dp.svg");
     --close-button: url("/dist/assets/images/icons/close-white-24dp.svg");
     --menu-button: url("/dist/assets/images/icons/menu-white-24dp.svg");
-    --add-task-button: url("/dist/assets/images/icons/add-white-24dp.svg");
+    --add-task-btn: url("/dist/assets/images/icons/add-white-24dp.svg");
 }
 
 :root[theme="light"] {
@@ -88,7 +88,7 @@
     --theme-toggle-icon: url("/dist/assets/images/icons/wb_sunny-black-24dp.svg");
     --close-button: url("/dist/assets/images/icons/close-black-24dp.svg");
     --menu-button: url("/dist/assets/images/icons/menu-black-24dp.svg");
-    --add-task-button: url("/dist/assets/images/icons/add-black-24dp.svg");
+    --add-task-btn: url("/dist/assets/images/icons/add-black-24dp.svg");
 }
 
 * {
@@ -408,7 +408,7 @@ input[type="submit"] {
   opacity: 1;
 }
 
-.add-task-button {
+.add-task-btn {
   position: absolute;
   top: 3rem;
   right: 15px;
@@ -423,12 +423,12 @@ input[type="submit"] {
   opacity: 0.9;
 }
 
-.add-task-button:hover, 
-.add-task-button:focus {
+.add-task-btn:hover, 
+.add-task-btn:focus {
   opacity: 1;
 }
 
-.add-task-button span {
+.add-task-btn span {
   font-weight: bold;
   vertical-align: middle;
 }
@@ -458,7 +458,7 @@ input[type="submit"] {
 }
 
 .group-btn,
-.add-group-button {
+.add-group-btn {
   width: 95%;
   margin: 5px 0;
   padding: 10px;
@@ -485,7 +485,7 @@ input[type="submit"] {
   padding-bottom: 1.5rem;
 }
 
-.add-group-button {
+.add-group-btn {
   padding: 10px 5px;
   font-size: 1.3rem;
 }
@@ -733,7 +733,7 @@ input[type="submit"] {
     display: none;
   }
 
-  .add-task-button {
+  .add-task-btn {
     z-index: 1;
     position: fixed;
     left: 10px;
