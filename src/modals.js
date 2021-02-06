@@ -1,8 +1,8 @@
+import { groups } from "./logic";
 import {accessibilityOptions, settings} from "./site-settings";
 
 const DOM = (() => {
   const addGroupBtn = document.querySelector(".add-group-btn");
-  const addTaskBtn = document.querySelector(".add-task-btn");
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
   const groupButtons = document.getElementsByClassName("group-btn");
   const groupOptionBtn = document.querySelector(".group-option-btn");
@@ -11,7 +11,6 @@ const DOM = (() => {
   const selectedGroup = document.querySelector(".selected-group");
   return {
     addGroupBtn,
-    addTaskBtn,
     defaultGroups,
     groupButtons,
     groupOptionBtn,
@@ -126,6 +125,7 @@ const groupModal = (() => {
     nameInput.setAttribute("type", "text");
     nameInput.setAttribute("required", "true");
     nameInput.setAttribute("id", "name-input");
+    nameInput.setAttribute("autocomplete", "off");
     nameInput.classList.add("focusable");
 
     if (e.target.classList.contains("add-group-btn")) {
@@ -185,7 +185,8 @@ const groupModal = (() => {
 })();
 
 const taskModal = (() => {
-  const render = (e) => {
+  // pass group list from task module pattern in logic.js file as argument
+  const render = (e, groupOptions) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
@@ -215,12 +216,19 @@ const taskModal = (() => {
     nameInput.setAttribute("id", "name-input");
     nameInput.setAttribute("placeholder", "Enter a task name");
     nameInput.setAttribute("required", "true");
+    nameInput.setAttribute("autocomplete", "off");
     nameInput.className = "focusable";
 
     groupLabel.setAttribute("for", "group-select");
     groupLabel.textContent = "Group";
     groupSelect.setAttribute("id", "group-select");
     groupSelect.className = "focusable";
+    for (let i = 0; i < groupOptions.length; i++) {
+      const option = document.createElement("option");
+      option.setAttribute("value", groupOptions[i]);
+      option.textContent = groupOptions[i];
+      groupSelect.appendChild(option);
+    };
     
     priorityLabel.setAttribute("for", "priority-select");
     priorityLabel.textContent = "Priority";
@@ -265,6 +273,9 @@ const taskModal = (() => {
       const editBtn = document.createElement("input");
 
       legend.textContent = "Edit Task";
+      groupSelect.setAttribute("disabled", "true");
+      groupLabel.style.opacity = "0.38";
+      groupSelect.style.opacity = "0.38";
 
       editBtn.setAttribute("type", "submit");
       editBtn.setAttribute("value", "UPDATE");
@@ -294,11 +305,6 @@ const taskModal = (() => {
     form.appendChild(fieldset);
     DOM.modalBox.appendChild(form);
   };
-
-  DOM.addTaskBtn.addEventListener("click", (e) => {
-    render(e);
-    generalModal.onOpen();
-  });
 
   return {render}
 })();
