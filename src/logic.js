@@ -8,10 +8,13 @@ const DOM = (() => {
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
   const groupButtons = document.getElementsByClassName("group-btn");
   const modalBox = document.querySelector(".modal-box");
+  const taskItems = document.getElementsByClassName("task-item");
+
   return {
     defaultGroups,
     groupButtons,
-    modalBox
+    modalBox,
+    taskItems
   }
 })();
 
@@ -49,6 +52,36 @@ const tasks = (() => {
   const create = () => {
     alert("ok");
   };
+
+  const toggleComplete = (node) => {
+    if (node.getAttribute("style") === null) {
+      node.style.backgroundImage = 
+          "url(assets/images/icons/done-black-24dp.svg)";
+    } else {
+      node.removeAttribute("style");
+    };
+  };
+
+  Array.from(DOM.taskItems).forEach(item => {
+    item.addEventListener("click", (e) => {
+      switch (e.target) {
+        case e.currentTarget.children[1]:
+          toggleComplete(e.currentTarget.children[1]);
+          // if (e.currentTarget.children[1].getAttribute("style") === null) {
+          //   e.currentTarget.children[1].style.backgroundImage = 
+          //       "url(assets/images/icons/done-black-24dp.svg)";
+          // } else {
+          //   e.currentTarget.children[1].removeAttribute("style");
+          // };
+          break;
+        case e.currentTarget.children[2]:
+          e.currentTarget.children[4].classList.toggle("expanded");
+          break;
+        default:
+          return;
+      };
+    });
+  });
 })();
 
 const groups = (() => {
@@ -109,15 +142,6 @@ const groups = (() => {
         return;
     };
   });
-
-  // return {
-  //   checkName,
-  //   create,
-  //   remove,
-  //   update,
-  //   setActive,
-  //   setInactive
-  // }
 })();
 
 // const buttonListeners = (() => {

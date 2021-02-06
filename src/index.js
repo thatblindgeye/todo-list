@@ -3,7 +3,7 @@
 import './style.css';
 import {displayOptions, accessibilityOptions} from "./site-settings";
 import {groupModal, taskModal, warningModal} from "./modals";
-import {groups, toDo} from "./logic";
+import {groups, tasks, toDo} from "./logic";
 import format from 'date-fns/format';
 
 console.log(toDo.list);

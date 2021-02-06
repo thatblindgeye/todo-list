@@ -103,9 +103,6 @@ const accessibilityOptions = (() => {
     Array.from(document.querySelectorAll(".label-arrow")).forEach(item => {
       item.style.transition = "transform 0.75s";
     });
-    Array.from(document.querySelectorAll(".task-details")).forEach(item => {
-      item.style.transition = "height 0.5s";
-    });
   };
         
   const animationsDisabled = () => {

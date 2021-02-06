@@ -333,11 +333,6 @@ input[type="submit"] {
   font-weight: bold;
 }
 
-/* #theme-switch:hover,
-#animation-switch:hover {
-  cursor: pointer;
-} */
-
 #accessibility-label {
   z-index: 2;
   display: flex;
@@ -596,13 +591,17 @@ input[type="submit"] {
 }
 
 .task-details {
-  visibility: visible;
+  visibility: hidden;
   flex-wrap: wrap;
   grid-area: details;
   padding: 0 0 10px 10px;
-  height: max-content;
-  /* use scrollheight in JS for transition effect? */
+  height: 0;
   overflow: hidden;
+}
+
+.expanded {
+  visibility: visible;
+  height: max-content;
 }
 
 .task-details p {
