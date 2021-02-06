@@ -185,7 +185,7 @@ const groupModal = (() => {
 })();
 
 const taskModal = (() => {
-  const _render = (e) => {
+  const render = (e) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
@@ -296,9 +296,11 @@ const taskModal = (() => {
   };
 
   DOM.addTaskBtn.addEventListener("click", (e) => {
-    _render(e);
+    render(e);
     generalModal.onOpen();
   });
+
+  return {render}
 })();
 
 export {generalModal, warningModal, groupModal, taskModal}

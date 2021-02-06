@@ -2,7 +2,7 @@
 
 import './style.css';
 import {displayOptions, accessibilityOptions} from "./site-settings";
-import {groupModal, taskModal, warningModal} from "./modals";
+import {groupModal, warningModal} from "./modals";
 import {groups, tasks, toDo} from "./logic";
 import format from 'date-fns/format';
 
