@@ -1,5 +1,6 @@
-import { groups } from "./logic";
-import {accessibilityOptions, settings} from "./site-settings";
+"use strict";
+
+import { accessibilityOptions, settings } from "./site-settings";
 
 const DOM = (() => {
   const addGroupBtn = document.querySelector(".add-group-btn");
@@ -26,6 +27,8 @@ const generalModal = (() => {
       DOM.modalBox.removeChild(DOM.modalBox.firstChild)
     };
     DOM.modalContainer.style.display = "none";
+    DOM.modalBox.dataset.indexRef = "";
+    DOM.modalBox.dataset.groupRef = "";
   };
 
   const onOpen = () => {
@@ -309,4 +312,4 @@ const taskModal = (() => {
   return {render}
 })();
 
-export {generalModal, warningModal, groupModal, taskModal}
+export { generalModal, groupModal, taskModal, warningModal }

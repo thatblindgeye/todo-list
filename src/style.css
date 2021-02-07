@@ -449,7 +449,6 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
 }
 
 .group-btn,
@@ -468,12 +467,14 @@ input[type="submit"] {
 
 .groups-container button:hover,
 .groups-container button:focus,
+.add-group-btn:hover,
+.add-group-btn:focus,
 .active {
   background-color: var(--background-menu-hover);
 }
 
 .default-groups-container {
-  margin: 45px 0 20px;
+  margin: 45px 0 30px;
 }
 
 .custom-groups-container {
@@ -481,11 +482,11 @@ input[type="submit"] {
 }
 
 .add-group-btn {
-  padding: 10px 5px;
+  padding: 10px;
   font-size: 1.3rem;
 }
 
-.custom-groups-container .material-icons {
+.add-group-btn .material-icons {
   vertical-align: middle;
 }
 
@@ -493,27 +494,30 @@ input[type="submit"] {
 /* ========== MAIN CONTENT ========== */
 #main-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   margin-top: 7rem;
   color: var(--primary-text);
+}
+
+.main-header {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: start;
+  width: 90%;
+  max-width: 500px;
+  margin: 25px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .task-container {
   width: 95%;
   max-width: 500px;
   height: 95%;
-  margin: 15px 0 10px;
+  margin-bottom: 10px;
   padding: 0 5px 15px;
-}
-
-.task-container-header {
-  display: grid;
-  grid-template-columns: 1fr max-content;
-  align-items: start;
-  margin-bottom: 25px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid var(--border-primary);
 }
 
 .group-option-btn {
@@ -747,17 +751,13 @@ input[type="submit"] {
   }
 
   .default-groups-container {
-    margin: 6rem 0 25px;
+    margin: 6.25rem 0 25px;
   }
 
   #main-content {
-    justify-content: center;
     margin: 2.1rem 0 0 300px;
   }
 
-  .task-container {
-    width: 80%;
-  }
 
   #lower-nav {
     position: fixed;
@@ -773,12 +773,8 @@ input[type="submit"] {
 
 @media only screen and (min-width: 1200px) {
   #main-content {
-    justify-content: flex-start;
+    align-items: flex-start;
     margin: 2.1rem 0 0 325px;
-  }
-
-  .task-container {
-    width: 50%;
   }
 }
 

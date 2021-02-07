@@ -1,9 +1,9 @@
 "use strict";
 
 import './style.css';
-import {displayOptions, accessibilityOptions} from "./site-settings";
-import {groupModal, warningModal} from "./modals";
-import {groups, modalEvents, tasks, toDo} from "./logic";
+import { accessibilityOptions, displayOptions } from "./site-settings";
+import { groupModal, warningModal } from "./modals";
+import { groups, modalEvents, tasks, toDo } from "./logic";
 import format from 'date-fns/format';
 
 console.log(toDo.list);

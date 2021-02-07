@@ -1,11 +1,11 @@
 "use strict";
-import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
-import differenceInDays from "date-fns/differenceInDays";
-import isToday from "date-fns/isToday";
-import {generalModal, taskModal} from "./modals";
+
+import { generalModal, taskModal } from "./modals";
+import { groupContainer } from "./render-containers";
 
 const DOM = (() => {
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
+  const nav = document.getElementById("main-nav");
   const groupButtons = document.getElementsByClassName("group-btn");
   const modalBox = document.querySelector(".modal-box");
   const selectedGroup = document.querySelector(".selected-group");
@@ -14,6 +14,7 @@ const DOM = (() => {
   return {
     defaultGroups,
     groupButtons,
+    nav,
     modalBox,
     selectedGroup,
     taskItems
@@ -46,10 +47,10 @@ const toDo = (() => {
     localStorage.setItem("toDo-list", JSON.stringify(list));
   };
 
-  // window.addEventListener("load", (e) => {
-  //   taskContainer.render(e);
-  //   groupContainer.render();
-  // });
+  window.addEventListener("load", (e) => {
+    // taskContainer.render(e);
+    groupContainer.render(list);
+  });
 
   return { 
     list,
@@ -143,8 +144,8 @@ const tasks = (() => {
     const groupData = node.dataset.group;
     const taskIndex = node.dataset.index;
     // store reference to group and index of task being updated
-    DOM.modalBox.setAttribute("data-index-ref", taskIndex);
-    DOM.modalBox.setAttribute("data-group-ref", groupData);
+    DOM.modalBox.dataset.indexRef = taskIndex;
+    DOM.modalBox.dataset.groupRef = groupData;
 
     document.querySelector("#name-input").value = 
         toDo.list[groupData][taskIndex].taskName;
@@ -156,8 +157,6 @@ const tasks = (() => {
     document.querySelector("#notes-input").value = 
         toDo.list[groupData][taskIndex].notes;
   };
-
-
 
   document.querySelector(".add-task-btn").addEventListener("click", (e) => {
     if (Object.keys(toDo.list).length === 0) {
@@ -201,10 +200,15 @@ const tasks = (() => {
   });
 
   Array.from(DOM.taskItems).forEach(item => {
-    item.addEventListener("keyup", (e) => {
-      if (e.key === " " && e.target === e.currentTarget.children[1]) {
-        _changeStatus(e.currentTarget);
-        // toDo.saveToLocal();
+    item.addEventListener("keydown", (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        if (e.target === e.currentTarget.children[1]) {
+          _changeStatus(e.currentTarget);
+          // toDo.saveToLocal();
+        } else if (e.target === e.currentTarget.children[2]) {
+          e.currentTarget.children[4].classList.toggle("expanded");
+        };
       };
     });
   });
@@ -254,11 +258,11 @@ const groups = (() => {
     target.classList.add("active");
   };
 
-  Array.from(DOM.groupButtons).forEach(button => {
-    button.addEventListener("click", () => {
+  DOM.nav.addEventListener("click", (e) => {
+    if (e.target.classList.contains("group-btn")) {
       _setInactive();
-      _setActive(button);
-    });
+      _setActive(e.target);
+    };
   });
 
   return {
@@ -275,32 +279,40 @@ const modalEvents = (() => {
 
     switch (e.target) {
       case document.querySelector(".submit-group-btn"):
-        e.preventDefault();
-        if (groups.checkName(nameInput.value)) {
-          alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
-          return;
-        } else {
-          groups.create(nameInput.value);
-          // toDo.saveToLocal();
-          generalModal.onClose();
-        };
-        break;
       case document.querySelector(".update-group-btn"):
         e.preventDefault();
         if (groups.checkName(nameInput.value)) {
           alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
           return;
         } else {
-          groups.update(DOM.selectedGroup.textContent, nameInput.value);
+          if (e.target.classList.contains("submit-group-btn")) {
+            groups.create(nameInput.value);
+          } else {
+            groups.update(DOM.selectedGroup.textContent, nameInput.value);
+          };
+        };
           // toDo.saveToLocal();
           generalModal.onClose();
-        };
+          groupContainer.render(toDo.list);
         break;
+      // case document.querySelector(".update-group-btn"):
+      //   e.preventDefault();
+      //   if (groups.checkName(nameInput.value)) {
+      //     alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
+      //     return;
+      //   } else {
+      //     groups.update(DOM.selectedGroup.textContent, nameInput.value);
+      //     // toDo.saveToLocal();
+      //     generalModal.onClose();
+      //     groupContainer.render(toDo.list);
+      //   };
+      //   break;
       case document.querySelector(".delete-group-btn"):
         if (confirm(`This will delete the ${DOM.selectedGroup.textContent} group, along with any tasks within it.\n\nPlease click "OK" to confirm deletion.`)) {
           groups.remove(DOM.selectedGroup.textContent);
           // toDo.saveToLocal();
           generalModal.onClose();
+          groupContainer.render(toDo.list);
         };
         break;
       case document.querySelector(".delete-completed-btn"):
@@ -358,20 +370,5 @@ const modalEvents = (() => {
     };
   });
 })();
-
-// let now = new Date();
-
-// let dueDate = new Date(("2021-02-01").split("-").join(", "));
-
-// if (isToday(dueDate)) {
-//   console.log("Today")
-// } else if (differenceInDays(dueDate, now) <= 7) {
-//   console.log("this week");
-//   console.log(differenceInDays(dueDate, now));
-// } else if (differenceInDays(dueDate, now) > 7) {
-//   console.log(formatDistanceToNowStrict(dueDate));
-// } else if (dueDate === "") {
-//   console.log("No due date")
-// }
 
 export { groups, modalEvents, tasks, toDo };
