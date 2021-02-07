@@ -82,13 +82,19 @@ const tasks = (() => {
         document.querySelector("#notes-input").value;
   };
 
+  const checkName = (name) => {
+    return (
+      name.match(/^\s{1,}$/) ||
+      name === ""
+    );
+  };
+
   const removeSingle = (node) => {
     toDo.list[node.dataset.group].splice(node.dataset.index, 1);
     node.remove();
     console.log(toDo.list);
   };
 
-  // pass DOM.selectedGroup.textContent as arguement
   const removeCompleted = (group) => {
     if (DOM.defaultGroups.indexOf(group) >= 0) {
       const keyArray = Object.keys(toDo.list);
@@ -110,11 +116,12 @@ const tasks = (() => {
     };
   };
 
-  const checkName = (name) => {
-    return (
-      name.match(/^\s{1,}$/) ||
-      name === ""
-    );
+  const confirmMassRemove = () => {
+    if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
+      return confirm(`This will delete all completed tasks in every group.\n\nPlease click "OK" to confirm deletion.`);
+    } else {
+      return confirm(`This will delete all completed tasks in the ${DOM.selectedGroup.textContent} group.\n\nPlease click "OK" to confirm deletion.`);
+    };
   };
 
   const _changeStatus = (node) => {
@@ -150,13 +157,7 @@ const tasks = (() => {
         toDo.list[groupData][taskIndex].notes;
   };
 
-  const confirmMassRemove = () => {
-    if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
-      return confirm(`This will delete all completed tasks in every group.\n\nPlease click "OK" to confirm deletion.`);
-    } else {
-      return confirm(`This will delete all completed tasks in the ${DOM.selectedGroup.textContent} group.\n\nPlease click "OK" to confirm deletion.`);
-    };
-  };
+
 
   document.querySelector(".add-task-btn").addEventListener("click", (e) => {
     if (Object.keys(toDo.list).length === 0) {
@@ -266,48 +267,12 @@ const groups = (() => {
     remove,
     checkName
   }
-
-  // DOM.modalBox.addEventListener("click", (e) => {
-  //   const nameInput = document.querySelector("#name-input");
-  //   switch (e.target) {
-  //     case document.querySelector(".submit-group-btn"):
-  //       e.preventDefault();
-  //       if (checkName(nameInput.value)) {
-  //         alert("Group name cannot be blank and cannot already be taken. Please enter a new name.");
-  //         return;
-  //       } else {
-  //         createGroup(nameInput.value);
-  //         // toDo.saveToLocal();
-  //         generalModal.onClose();
-  //       };
-  //       break;
-  //     case document.querySelector(".update-group-btn"):
-  //       e.preventDefault();
-  //       if (checkName(nameInput.value)) {
-  //         alert("Group name cannot be blank and cannot already be taken. Please enter a new name.");
-  //         return;
-  //       } else {
-  //         updateGroup(DOM.selectedGroup.textContent, nameInput.value);
-  //         // toDo.saveToLocal();
-  //         generalModal.onClose();
-  //       };
-  //       break;
-  //     case document.querySelector(".delete-group-btn"):
-  //       if (confirm(`This will delete the ${DOM.selectedGroup.textContent} group, along with any tasks within it. Please click "OK" to confirm deletion.`)) {
-  //         removeGroup(DOM.selectedGroup.textContent);
-  //       // toDo.saveToLocal();
-  //       };
-  //       generalModal.onClose();
-  //       break;
-  //     default:
-  //       return;
-  //   };
-  // });
 })();
 
 const modalEvents = (() => {
   DOM.modalBox.addEventListener("click", (e) => {
     const nameInput = document.querySelector("#name-input");
+
     switch (e.target) {
       case document.querySelector(".submit-group-btn"):
         e.preventDefault();
@@ -346,6 +311,48 @@ const modalEvents = (() => {
           console.log(toDo.list);
         };
         break;
+      case document.querySelector(".add-single-btn"):
+      case document.querySelector(".add-many-btn"):
+        const group = document.querySelector("#group-select");
+        e.preventDefault();
+        if (tasks.checkName(nameInput.value)) {
+          alert("Task name cannot be blank.\n\nPlease enter a new name.");
+          return;
+        } else {
+          const newTask = tasks.create(
+            nameInput.value,
+            document.querySelector("#priority-select").value,
+            document.querySelector("#date-select").value,
+            document.querySelector("#notes-input").value,
+            false
+          );
+          toDo.list[group.value].push(newTask);
+          // toDo.saveToLocal();
+          if (e.target.classList.contains("add-many-btn")) {
+            nameInput.focus();
+            nameInput.value = "";
+            group.selectedIndex = 0;
+            document.querySelector("#priority-select").value = "Normal";
+            document.querySelector("#date-select").value = "";
+            document.querySelector("#notes-input").value = "";
+          } else {
+            generalModal.onClose();
+          };
+          console.log(toDo.list);
+        };
+        break;
+      case document.querySelector(".update-task-btn"):
+        e.preventDefault();
+        if (tasks.checkName(nameInput.value)) {
+          alert("Task name cannot be blank.\n\nPlease enter a new name.");
+          return;
+        } else {
+          tasks.update();
+          // toDo.saveToLocal();
+          generalModal.onClose();
+          console.log(toDo.list);
+        };
+        break;
       default:
         return;
     };
@@ -367,4 +374,4 @@ const modalEvents = (() => {
 //   console.log("No due date")
 // }
 
-export { groups, tasks, toDo };
+export { groups, modalEvents, tasks, toDo };
