@@ -89,26 +89,26 @@ const tasks = (() => {
   };
 
   // pass DOM.selectedGroup.textContent as arguement
-  // const removeCompleted = (group) => {
-  //   if (DOM.defaultGroups.indexOf(group) >= 0) {
-  //     const keyArray = Object.keys(toDo.list);
-  //     Object.values(toDo.list).forEach((item, index) => {
-  //       for (let i = 0; i < item.length; i++) {
-  //         if (item[i].completed === true) {
-  //           toDo.list[keyArray[index]].splice(i, 1);
-  //         };
-  //       };
-  //     });
-  //   } else {
-  //     toDo.list[group].forEach((item) => {
-  //       for (let i = 0; i < toDo.list[group].length; i++) {
-  //         if (item.completed === true) {
-  //           toDo.list[group].splice(i, 1)
-  //         };
-  //       };
-  //     });
-  //   };
-  // };
+  const removeCompleted = (group) => {
+    if (DOM.defaultGroups.indexOf(group) >= 0) {
+      const keyArray = Object.keys(toDo.list);
+      Object.values(toDo.list).forEach((item, index) => {
+        for (let i = (item.length - 1); i >= 0; i--) {
+          if (item[i].completed === true) {
+            toDo.list[keyArray[index]].splice(i, 1);
+          };
+        };
+      });
+    } else {
+      toDo.list[group].forEach((item) => {
+        for (let i = (toDo.list[group].length - 1); i >= 0 ; i--) {
+          if (item.completed === true) {
+            toDo.list[group].splice(i, 1)
+          };
+        };
+      });
+    };
+  };
 
   const checkName = (name) => {
     return (
@@ -150,9 +150,22 @@ const tasks = (() => {
         toDo.list[groupData][taskIndex].notes;
   };
 
+  const confirmMassRemove = () => {
+    if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
+      return confirm(`This will delete all completed tasks in every group.\n\nPlease click "OK" to confirm deletion.`);
+    } else {
+      return confirm(`This will delete all completed tasks in the ${DOM.selectedGroup.textContent} group.\n\nPlease click "OK" to confirm deletion.`);
+    };
+  };
+
   document.querySelector(".add-task-btn").addEventListener("click", (e) => {
-    taskModal.render(e, Object.keys(toDo.list));
-    generalModal.onOpen();
+    if (Object.keys(toDo.list).length === 0) {
+      alert("No group exists to add tasks to.\n\nPlease create a group before adding a task.");
+      return;
+    } else {
+      taskModal.render(e, Object.keys(toDo.list));
+      generalModal.onOpen();
+    };
   });
 
   Array.from(DOM.taskItems).forEach(item => {
@@ -175,8 +188,10 @@ const tasks = (() => {
           break;
         // target is item's delete button
         case e.currentTarget.children[4].children[2]:
-          remove(e.currentTarget);
-          // toDo.saveToLocal();
+          if (confirm(`Please click "OK" to confirm deletion of task "${e.currentTarget.children[2].textContent}".`)) {
+            removeSingle(e.currentTarget);
+            // toDo.saveToLocal();
+          };
           break;
         default:
           return;
@@ -194,8 +209,10 @@ const tasks = (() => {
   });
 
   return {
+    confirmMassRemove,
     create,
     update,
+    removeCompleted,
     removeSingle,
     checkName
   }
@@ -295,7 +312,7 @@ const modalEvents = (() => {
       case document.querySelector(".submit-group-btn"):
         e.preventDefault();
         if (groups.checkName(nameInput.value)) {
-          alert("Group name cannot be blank and cannot already be taken. Please enter a new name.");
+          alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
           return;
         } else {
           groups.create(nameInput.value);
@@ -306,7 +323,7 @@ const modalEvents = (() => {
       case document.querySelector(".update-group-btn"):
         e.preventDefault();
         if (groups.checkName(nameInput.value)) {
-          alert("Group name cannot be blank and cannot already be taken. Please enter a new name.");
+          alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
           return;
         } else {
           groups.update(DOM.selectedGroup.textContent, nameInput.value);
@@ -315,11 +332,19 @@ const modalEvents = (() => {
         };
         break;
       case document.querySelector(".delete-group-btn"):
-        if (confirm(`This will delete the ${DOM.selectedGroup.textContent} group, along with any tasks within it. Please click "OK" to confirm deletion.`)) {
+        if (confirm(`This will delete the ${DOM.selectedGroup.textContent} group, along with any tasks within it.\n\nPlease click "OK" to confirm deletion.`)) {
           groups.remove(DOM.selectedGroup.textContent);
-        // toDo.saveToLocal();
+          // toDo.saveToLocal();
+          generalModal.onClose();
         };
-        generalModal.onClose();
+        break;
+      case document.querySelector(".delete-completed-btn"):
+        if (tasks.confirmMassRemove()) {
+          tasks.removeCompleted(DOM.selectedGroup.textContent);
+          // toDo.saveToLocal();
+          generalModal.onClose();
+          console.log(toDo.list);
+        };
         break;
       default:
         return;
