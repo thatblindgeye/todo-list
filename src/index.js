@@ -4,9 +4,10 @@ import './style.css';
 import { accessibilityOptions, displayOptions } from "./site-settings";
 import { groupModal, warningModal } from "./modals";
 import { groups, modalEvents, tasks, toDo } from "./logic";
-import format from 'date-fns/format';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
+import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 
-console.log(toDo.list);
+console.log(toDo.masterList);
 
 const DOM = (() => {
   const menuContainer = document.querySelector("#main-nav");
