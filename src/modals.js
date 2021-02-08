@@ -9,7 +9,7 @@ const DOM = (() => {
   const groupOptionBtn = document.querySelector(".group-option-btn");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
-  const selectedGroup = document.querySelector(".selected-group");
+  const taskHeader = document.querySelector(".selected-group");
 
   return {
     addGroupBtn,
@@ -18,7 +18,7 @@ const DOM = (() => {
     groupOptionBtn,
     modalBox,
     modalContainer,
-    selectedGroup
+    taskHeader
   }
 })();
 
@@ -151,7 +151,7 @@ const groupModal = (() => {
       deleteCompleted.classList.add("delete-completed-btn", "delete-btn", "focusable");
       deleteCompleted.textContent = "DELETE COMPLETED TASKS";
 
-      if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
+      if (DOM.defaultGroups.indexOf(DOM.taskHeader.textContent) >= 0) {
         nameLabel.style.opacity = "0.38";
         nameInput.setAttribute("disabled", "true");
         nameInput.style.opacity = "0.38";
@@ -187,7 +187,7 @@ const groupModal = (() => {
 })();
 
 const taskModal = (() => {
-  const _priorityArray = ["Normal", "Importan"];
+  const _priorityArray = ["Normal", "Important"];
 
   // pass group list from task module pattern in logic.js file as argument
   const render = (e, groupList) => {
@@ -253,13 +253,6 @@ const taskModal = (() => {
     notesInput.setAttribute("id", "notes-input");
     notesInput.setAttribute("placeholder", "Enter any additional notes for the task");
     notesInput.className = "focusable";
-
-    // priorityOption1.textContent = "Normal";
-    // priorityOption2.textContent = "Important";
-    // prioritySelect.appendChild(priorityOption1);
-    // prioritySelect.appendChild(priorityOption2);
-    // const priorityOption1 = document.createElement("option");
-    // const priorityOption2 = document.createElement("option");
 
     if (e.target.textContent.includes("ADD TASK")) {
       legend.textContent = "Add a Task";

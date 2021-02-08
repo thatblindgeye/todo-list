@@ -5,23 +5,25 @@ import { groupContainer, taskContainer } from "./render-containers";
 
 const DOM = (() => {
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
-  const nav = document.getElementById("main-nav");
   const groupButtons = document.getElementsByClassName("group-btn");
   const modalBox = document.querySelector(".modal-box");
-  const selectedGroup = document.querySelector(".selected-group");
-  const taskItems = document.getElementsByClassName("task-item");
+  const nav = document.getElementById("main-nav");
+  const taskHeader = document.querySelector(".selected-group");
+  const taskList = document.querySelector(".task-container");
 
   return {
     defaultGroups,
     groupButtons,
     nav,
     modalBox,
-    selectedGroup,
-    taskItems
+    taskHeader,
+    taskList
   }
 })();
 
 const toDo = (() => {
+  const _activeOnLoad = document.getElementById("important");
+
   const masterList = JSON.parse(localStorage.getItem("toDo-list")) || 
     {
       Example: [
@@ -48,7 +50,7 @@ const toDo = (() => {
   };
 
   window.addEventListener("load", (e) => {
-    // taskContainer.render(e);
+    taskContainer.loadGroupTasks(masterList, _activeOnLoad);
     groupContainer.render(masterList);
   });
 
@@ -84,7 +86,7 @@ const groups = (() => {
   };
 
   const setInactive = () => {
-    Array.from(DOM.groupButtons).forEach(button => {
+    Array.from(document.getElementsByClassName("group-btn")).forEach(button => {
       button.classList.remove("active");
     });
   };
@@ -98,6 +100,7 @@ const groups = (() => {
       setInactive();
       setActive(e.target);
       taskContainer.updateHeader(e.target);
+      taskContainer.loadGroupTasks(toDo.masterList, e.target);
     };
   });
 
@@ -171,10 +174,10 @@ const tasks = (() => {
   };
 
   const confirmMassRemove = () => {
-    if (DOM.defaultGroups.indexOf(DOM.selectedGroup.textContent) >= 0) {
+    if (DOM.defaultGroups.indexOf(DOM.taskHeader.textContent) >= 0) {
       return confirm(`This will delete all completed tasks in every group.\n\nPlease click "OK" to confirm deletion.`);
     } else {
-      return confirm(`This will delete all completed tasks in the ${DOM.selectedGroup.textContent} group.\n\nPlease click "OK" to confirm deletion.`);
+      return confirm(`This will delete all completed tasks in the ${DOM.taskHeader.textContent} group.\n\nPlease click "OK" to confirm deletion.`);
     };
   };
 
@@ -211,6 +214,33 @@ const tasks = (() => {
         toDo.masterList[groupData][taskIndex].notes;
   };
 
+  const _checkTaskEvent = (e) => {
+    switch (true) {
+      case e.target.classList.contains("task-status"):
+        _changeStatus(e.target.parentElement);
+        // toDo.saveToLocal();
+        break;
+      case e.target.classList.contains("task-name"):
+        // toggle's task item's details section
+        e.target.parentElement.children[4].classList.toggle("expanded");
+        break;
+      case e.target.classList.contains("edit-btn"):
+        taskModal.render(e, Object.keys(toDo.masterList));
+        _getInfo(e.target.parentElement);
+        generalModal.onOpen();
+        break;
+      case e.target.classList.contains("delete-btn"):
+        if (confirm(`Please click "OK" to confirm deletion of task 
+            "${e.target.parentElement.dataset.task}".`)) {
+          removeSingle(e.target.parentElement);
+          // toDo.saveToLocal();
+        };
+        break;
+      default:
+        return;
+    };
+  }
+
   document.querySelector(".add-task-btn").addEventListener("click", (e) => {
     if (Object.keys(toDo.masterList).length === 0) {
       alert("No groups exist. Please create a group before adding a task.");
@@ -221,58 +251,18 @@ const tasks = (() => {
     };
   });
 
-  Array.from(DOM.taskItems).forEach(item => {
-    item.addEventListener("click", (e) => {
-      switch (e.target) {
-        // target is item's checkbox
-        case e.currentTarget.children[1]:
-          _changeStatus(e.currentTarget);
-          // toDo.saveToLocal();
-          break;
-        // target is item's name
-        case e.currentTarget.children[2]:
-          e.currentTarget.children[4].classList.toggle("expanded");
-          break;
-        // target is item's edit button
-        case e.currentTarget.children[4].children[1]:
-          taskModal.render(e, Object.keys(toDo.masterList));
-          _getInfo(e.currentTarget);
-          generalModal.onOpen();
-          break;
-        // target is item's delete button
-        case e.currentTarget.children[4].children[2]:
-          if (confirm(`Please click "OK" to confirm deletion of task "${e.currentTarget.children[2].textContent}".`)) {
-            removeSingle(e.currentTarget);
-            // toDo.saveToLocal();
-          };
-          break;
-        default:
-          return;
-      };
-    });
-  });
-
-  Array.from(DOM.taskItems).forEach(item => {
-    item.addEventListener("keydown", (e) => {
-      if (e.key === " ") {
-        e.preventDefault();
-        if (e.target === e.currentTarget.children[1]) {
-          _changeStatus(e.currentTarget);
-          // toDo.saveToLocal();
-        } else if (e.target === e.currentTarget.children[2]) {
-          e.currentTarget.children[4].classList.toggle("expanded");
-        };
-      };
-    });
+  DOM.taskList.addEventListener("click", _checkTaskEvent);
+  DOM.taskList.addEventListener("keydown", (e) => {
+    if (e.key === " ") _checkTaskEvent(e);
   });
 
   return {
+    checkName,
     confirmMassRemove,
     create,
-    update,
     removeCompleted,
     removeSingle,
-    checkName
+    update
   }
 })();
 
@@ -292,7 +282,7 @@ const modalEvents = (() => {
             groups.create(nameInput.value);
             groupContainer.render(toDo.masterList);
           } else {
-            groups.update(DOM.selectedGroup.textContent, nameInput.value);
+            groups.update(DOM.taskHeader.textContent, nameInput.value);
             document.querySelector(".active").textContent = nameInput.value;
             taskContainer.updateHeader(document.querySelector(".active"));
           };
@@ -300,21 +290,9 @@ const modalEvents = (() => {
           // toDo.saveToLocal();
           generalModal.onClose();
         break;
-      // case document.querySelector(".update-group-btn"):
-      //   e.preventDefault();
-      //   if (groups.checkName(nameInput.value)) {
-      //     alert("Group name cannot be blank and cannot already be taken.\n\nPlease enter a new name.");
-      //     return;
-      //   } else {
-      //     groups.update(DOM.selectedGroup.textContent, nameInput.value);
-      //     // toDo.saveToLocal();
-      //     generalModal.onClose();
-      //     groupContainer.render(toDo.masterList);
-      //   };
-      //   break;
       case document.querySelector(".delete-group-btn"):
-        if (confirm(`This will delete the ${DOM.selectedGroup.textContent} group, along with any tasks within it.\n\nPlease click "OK" to confirm deletion.`)) {
-          groups.remove(DOM.selectedGroup.textContent);
+        if (confirm(`This will delete the ${DOM.taskHeader.textContent} group, along with any tasks within it.\n\nPlease click "OK" to confirm deletion.`)) {
+          groups.remove(DOM.taskHeader.textContent);
           // toDo.saveToLocal();
           generalModal.onClose();
           groupContainer.render(toDo.masterList);
@@ -322,7 +300,7 @@ const modalEvents = (() => {
         break;
       case document.querySelector(".delete-completed-btn"):
         if (tasks.confirmMassRemove()) {
-          tasks.removeCompleted(DOM.selectedGroup.textContent);
+          tasks.removeCompleted(DOM.taskHeader.textContent);
           // toDo.saveToLocal();
           generalModal.onClose();
           console.log(toDo.masterList);
