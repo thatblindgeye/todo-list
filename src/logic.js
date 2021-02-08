@@ -4,11 +4,13 @@ import { generalModal, taskModal } from "./modals";
 import { groupContainer, taskContainer } from "./render-containers";
 
 const DOM = (() => {
+  const activeOnLoad = document.getElementById("important");
   const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
   const modalBox = document.querySelector(".modal-box");
   const taskHeader = document.querySelector(".selected-group");
-
+  
   return {
+    activeOnLoad,
     defaultGroups,
     modalBox,
     taskHeader
@@ -16,8 +18,6 @@ const DOM = (() => {
 })();
 
 const toDo = (() => {
-  const _activeOnLoad = document.getElementById("important");
-
   const masterList = JSON.parse(localStorage.getItem("toDo-list")) || 
     {
       Example: [
@@ -44,8 +44,8 @@ const toDo = (() => {
   };
 
   window.addEventListener("load", (e) => {
-    taskContainer.loadGroupTasks(masterList, _activeOnLoad);
     groupContainer.render(masterList);
+    taskContainer.loadGroupTasks(masterList, DOM.activeOnLoad);
   });
 
   return { 
@@ -55,6 +55,12 @@ const toDo = (() => {
 })();
 
 const groups = (() => {
+  const _setInactive = () => {
+    Array.from(document.getElementsByClassName("group-btn")).forEach(button => {
+      button.classList.remove("active");
+    });
+  };
+
   const create = (name) => {
     toDo.masterList[name] = [];
     console.log(toDo.masterList);
@@ -79,19 +85,13 @@ const groups = (() => {
     console.log(toDo.masterList);
   };
 
-  const setInactive = () => {
-    Array.from(document.getElementsByClassName("group-btn")).forEach(button => {
-      button.classList.remove("active");
-    });
-  };
-
   const setActive = (target) => {
     target.classList.add("active");
   };
 
   document.getElementById("main-nav").addEventListener("click", (e) => {
     if (e.target.classList.contains("group-btn")) {
-      setInactive();
+      _setInactive();
       setActive(e.target);
       taskContainer.updateHeader(e.target);
       taskContainer.loadGroupTasks(toDo.masterList, e.target);
@@ -99,12 +99,11 @@ const groups = (() => {
   });
 
   return {
-    checkName,
     create,
     update,
+    checkName,
     remove,
-    setActive,
-    setInactive
+    setActive
   }
 })();
 
@@ -126,7 +125,7 @@ const tasks = (() => {
     console.log(toDo.masterList);
   };
 
-  const _getInfo = (node) => {
+  const _getTaskData = (node) => {
     const groupData = node.dataset.group;
     const taskIndex = node.dataset.index;
     // store reference to group and index of task being updated
@@ -144,7 +143,7 @@ const tasks = (() => {
         toDo.masterList[groupData][taskIndex].notes;
   };
 
-  const _checkTaskEvent = (e) => {
+  const _resolveTaskEvent = (e) => {
     switch (true) {
       case e.target.classList.contains("task-status"):
         _changeStatus(e.target.parentElement);
@@ -156,13 +155,14 @@ const tasks = (() => {
         break;
       case e.target.classList.contains("edit-btn"):
         taskModal.render(e, Object.keys(toDo.masterList));
-        _getInfo(e.target.parentElement);
+        _getTaskData(e.target.parentElement);
         generalModal.onOpen();
         break;
       case e.target.classList.contains("delete-btn"):
         if (confirm(`Please click "OK" to confirm deletion of task 
             "${e.target.parentElement.dataset.task}".`)) {
           removeSingle(e.target.parentElement);
+          taskContainer.loadGroupTasks(toDo.masterList, DOM.taskHeader);
           // toDo.saveToLocal();
         };
         break;
@@ -250,23 +250,24 @@ const tasks = (() => {
     };
   });
 
-  _taskList.addEventListener("click", _checkTaskEvent);
+  _taskList.addEventListener("click", _resolveTaskEvent);
   _taskList.addEventListener("keydown", (e) => {
-    if (e.key === " ") _checkTaskEvent(e);
+    if (e.key === " ") _resolveTaskEvent(e);
   });
 
   return {
-    checkName,
-    confirmMassRemove,
     create,
-    removeCompleted,
+    update,
+    checkName,
     removeSingle,
-    update
+    removeCompleted,
+    confirmMassRemove,
   }
 })();
 
 const modalEvents = (() => {
   DOM.modalBox.addEventListener("click", (e) => {
+    const _activeGroup = document.querySelector(".active");
     const nameInput = document.querySelector("#name-input");
     const group = document.querySelector("#group-select");
 
@@ -282,10 +283,13 @@ const modalEvents = (() => {
           if (e.target.classList.contains("submit-group-btn")) {
             groups.create(nameInput.value);
             groupContainer.render(toDo.masterList);
+            groups.setActive(DOM.activeOnLoad);
+            taskContainer.loadGroupTasks(toDo.masterList, DOM.activeOnLoad);
+            taskContainer.updateHeader(DOM.activeOnLoad);
           } else {
             groups.update(DOM.taskHeader.textContent, nameInput.value);
-            document.querySelector(".active").textContent = nameInput.value;
-            taskContainer.updateHeader(document.querySelector(".active"));
+            _activeGroup.textContent = nameInput.value;
+            taskContainer.updateHeader(_activeGroup);
           };
         };
           // toDo.saveToLocal();
@@ -296,9 +300,12 @@ const modalEvents = (() => {
             `group, along with any tasks within it.\n\nPlease click "OK" ` + 
             `to confirm deletion.`)) {
           groups.remove(DOM.taskHeader.textContent);
-          // toDo.saveToLocal();
+          // toDo.saveToLocal(); 
           generalModal.onClose();
           groupContainer.render(toDo.masterList);
+          groups.setActive(DOM.activeOnLoad);
+          taskContainer.loadGroupTasks(toDo.masterList, DOM.activeOnLoad);
+          taskContainer.updateHeader(DOM.activeOnLoad);
         };
         break;
       case document.querySelector(".delete-completed-btn"):
@@ -306,6 +313,7 @@ const modalEvents = (() => {
           tasks.removeCompleted(DOM.taskHeader.textContent);
           // toDo.saveToLocal();
           generalModal.onClose();
+          taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
           console.log(toDo.masterList);
         };
         break;
@@ -335,6 +343,7 @@ const modalEvents = (() => {
           } else {
             generalModal.onClose();
           };
+          taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
           console.log(toDo.masterList);
         };
         break;
@@ -347,6 +356,7 @@ const modalEvents = (() => {
           tasks.update();
           // toDo.saveToLocal();
           generalModal.onClose();
+          taskContainer.loadGroupTasks(toDo.masterList, DOM.taskHeader);
           console.log(toDo.masterList);
         };
         break;
@@ -356,4 +366,4 @@ const modalEvents = (() => {
   });
 })();
 
-export { groups, modalEvents, tasks, toDo };
+export { toDo, groups, tasks, modalEvents };

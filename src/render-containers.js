@@ -29,11 +29,11 @@ const groupContainer = (() => {
 
 const taskContainer = (() => {
   const _taskHeader = document.querySelector(".selected-group");
-  const _tasksList = document.querySelector(".task-container");
+  const _taskList = document.querySelector(".task-container");
 
   const _clear = () => {
-    while (_tasksList.firstChild) {
-      _tasksList.removeChild(_tasksList.firstChild);
+    while (_taskList.firstChild) {
+      _taskList.removeChild(_taskList.firstChild);
     };
   };
 
@@ -139,7 +139,7 @@ const taskContainer = (() => {
     taskItem.appendChild(nameField);
     taskItem.appendChild(dateField);
     taskItem.appendChild(details);
-    _tasksList.appendChild(taskItem);
+    _taskList.appendChild(taskItem);
   };
 
   const loadGroupTasks = (list, target) => {
@@ -188,10 +188,10 @@ const taskContainer = (() => {
         });
         break;
     };
-    if (_tasksList.children.length === 0) {
+    if (_taskList.children.length === 0) {
       const h2 = document.createElement("h2");
       h2.textContent = "No tasks for this group!";
-      _tasksList.appendChild(h2);
+      _taskList.appendChild(h2);
     };
   };
 

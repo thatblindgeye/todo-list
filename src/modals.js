@@ -43,9 +43,9 @@ const generalModal = (() => {
   });
 
   return {
-    createCloseBtn,
     onClose,
-    onOpen
+    onOpen,
+    createCloseBtn
   }
 })();
 
@@ -183,7 +183,7 @@ const taskModal = (() => {
   const _priorityArray = ["Normal", "Important"];
 
   // pass group list from task module pattern in logic.js file as argument
-  const render = (e, groupList) => {
+  const render = (e, groupArray) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
     const legend = document.createElement("legend");
@@ -208,10 +208,10 @@ const taskModal = (() => {
     const groupSelect = document.createElement("select");
     groupSelect.setAttribute("id", "group-select");
     groupSelect.className = "focusable";
-    for (let i = 0; i < groupList.length; i++) {
+    for (let i = 0; i < groupArray.length; i++) {
       const groupOption = document.createElement("option");
-      groupOption.setAttribute("value", groupList[i]);
-      groupOption.textContent = groupList[i];
+      groupOption.setAttribute("value", groupArray[i]);
+      groupOption.textContent = groupArray[i];
       groupSelect.appendChild(groupOption);
     };
 
@@ -306,4 +306,4 @@ const taskModal = (() => {
   return {render}
 })();
 
-export { generalModal, groupModal, taskModal, warningModal }
+export { generalModal, warningModal, groupModal, taskModal }
