@@ -116,8 +116,13 @@ const taskContainer = (() => {
     details.className = "task-details";
 
     const notesField = document.createElement("p");
+    const notesArray = task.notes.split("\n");
     notesField.className = "task-notes";
-    notesField.textContent = task.notes;
+    for (let i = 0; i < notesArray.length; i++) {
+      const text = document.createTextNode(notesArray[i])
+      notesField.appendChild(text);
+      notesField.appendChild(document.createElement("br"));
+    };
 
     const editBtn = document.createElement("button");
     editBtn.setAttribute("type", "button");

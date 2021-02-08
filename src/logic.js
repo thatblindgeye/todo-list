@@ -162,7 +162,8 @@ const tasks = (() => {
         if (confirm(`Please click "OK" to confirm deletion of task 
             "${e.target.parentElement.dataset.task}".`)) {
           removeSingle(e.target.parentElement);
-          taskContainer.loadGroupTasks(toDo.masterList, DOM.taskHeader);
+          taskContainer.loadGroupTasks(toDo.masterList, 
+                                      document.querySelector(".active"));
           // toDo.saveToLocal();
         };
         break;
@@ -252,7 +253,12 @@ const tasks = (() => {
 
   _taskList.addEventListener("click", _resolveTaskEvent);
   _taskList.addEventListener("keydown", (e) => {
-    if (e.key === " ") _resolveTaskEvent(e);
+    if (e.key === " " && 
+        (e.target.classList.contains("task-status") || 
+        e.target.classList.contains("task-name"))) {
+      e.preventDefault();
+      _resolveTaskEvent(e);
+    };
   });
 
   return {
