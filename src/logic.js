@@ -33,7 +33,7 @@ const toDo = (() => {
           taskName: "Bring Muffin to vet",
           completed: false,
           priority: "Important",
-          dueDate: "2021-03-05",
+          dueDate: "2021-12-31",
           notes: "Pack her favorite toy so she stays calm.",
         },
       ],

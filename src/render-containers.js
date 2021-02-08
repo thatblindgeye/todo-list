@@ -37,6 +37,12 @@ const taskContainer = (() => {
     };
   };
 
+  const _checkDate = (date) => {
+    const now = new Date();
+    const newDate = new Date((date).split("-").join(", "));
+    return differenceInCalendarDays(newDate, now);
+  };
+
   const _formattedDate = (date) => {
     const now = new Date();
     const newDate = new Date((date).split("-").join(", "));
@@ -53,6 +59,9 @@ const taskContainer = (() => {
         break;
       case differenceInCalendarDays(newDate, now) === 1:
         return "Tomorrow";
+        break;
+      case differenceInCalendarDays(newDate, now) <= 29:
+        return differenceInCalendarDays(newDate, now) + " days";
         break;
       default:
         return formatDistanceToNowStrict(newDate);
@@ -141,6 +150,33 @@ const taskContainer = (() => {
         Object.values(list).forEach((item, index) => {
           for (let i = 0; i < item.length; i++) {
             if (item[i].priority === "Important") {
+              _render(item[i], keyArray[index], i);
+            };
+          };
+        });
+        break;
+      case document.getElementById("next-7-days"):
+        Object.values(list).forEach((item, index) => {
+          for (let i = 0; i < item.length; i++) {
+            if (_checkDate(item[i].dueDate) <= 7) {
+              _render(item[i], keyArray[index], i);
+            };
+          };
+        });
+        break;
+      case document.getElementById("later"):
+        Object.values(list).forEach((item, index) => {
+          for (let i = 0; i < item.length; i++) {
+            if (_checkDate(item[i].dueDate) > 7) {
+              _render(item[i], keyArray[index], i);
+            };
+          };
+        });
+        break;
+      case document.getElementById("eventually"):
+        Object.values(list).forEach((item, index) => {
+          for (let i = 0; i < item.length; i++) {
+            if (item[i].dueDate === "") {
               _render(item[i], keyArray[index], i);
             };
           };
