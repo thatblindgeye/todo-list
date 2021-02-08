@@ -9,26 +9,18 @@ import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 
 console.log(toDo.masterList);
 
-const DOM = (() => {
+const menuVisibility = (() => {
   const menuContainer = document.querySelector("#main-nav");
   const menuOpenButton = document.querySelector(".menu-button");
   const menuCloseButton = document.querySelector(".menu-close-button");
-  
-  return {
-    menuContainer,
-    menuOpenButton,
-    menuCloseButton
-  }
-})();
 
-const menuVisibility = (() => {
   const _onScreenSize = () => {
     if (document.documentElement.scrollWidth > 763) {
-      DOM.menuContainer.style.visibility = "visible";
-      DOM.menuContainer.style.left = "0";
+      menuContainer.style.visibility = "visible";
+      menuContainer.style.left = "0";
     } else {
-      DOM.menuContainer.style.visibility = "hidden";
-      DOM.menuContainer.style.left = "-800px";
+      menuContainer.style.visibility = "hidden";
+      menuContainer.style.left = "-800px";
     };
   };
   
@@ -36,19 +28,19 @@ const menuVisibility = (() => {
   window.addEventListener("load", _onScreenSize);
 
   const _toggleMenu = () => {
-    if (DOM.menuContainer.style.visibility === "hidden") {
-      DOM.menuContainer.style.visibility = "visible";
-      DOM.menuContainer.style.left = "0";
-      DOM.menuCloseButton.focus();
+    if (menuContainer.style.visibility === "hidden") {
+      menuContainer.style.visibility = "visible";
+      menuContainer.style.left = "0";
+      menuCloseButton.focus();
     } else {
-      DOM.menuContainer.style.left = "-800px";
+      menuContainer.style.left = "-800px";
       setTimeout(() => {
-        DOM.menuContainer.style.visibility = "hidden"
+        menuContainer.style.visibility = "hidden"
       }, 600);
-      DOM.menuOpenButton.focus();
+      menuOpenButton.focus();
     };
   };
 
-  DOM.menuOpenButton.addEventListener("click", _toggleMenu);
-  DOM.menuCloseButton.addEventListener("click", _toggleMenu);
+  menuOpenButton.addEventListener("click", _toggleMenu);
+  menuCloseButton.addEventListener("click", _toggleMenu);
 })();

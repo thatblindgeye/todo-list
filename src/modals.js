@@ -3,22 +3,12 @@
 import { accessibilityOptions, settings } from "./site-settings";
 
 const DOM = (() => {
-  const addGroupBtn = document.querySelector(".add-group-btn");
-  const defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
-  const groupButtons = document.getElementsByClassName("group-btn");
-  const groupOptionBtn = document.querySelector(".group-option-btn");
   const modalBox = document.querySelector(".modal-box");
   const modalContainer = document.querySelector(".modal-container");
-  const taskHeader = document.querySelector(".selected-group");
 
   return {
-    addGroupBtn,
-    defaultGroups,
-    groupButtons,
-    groupOptionBtn,
     modalBox,
-    modalContainer,
-    taskHeader
+    modalContainer
   }
 })();
 
@@ -111,6 +101,9 @@ const warningModal = (() => {
 })();
 
 const groupModal = (() => {
+  const _defaultGroups = ["Important", "Next 7 Days", "Later", "Eventually"];
+  const _taskHeader = document.querySelector(".selected-group");
+
   const _render = (e) => {
     const form = document.createElement("form");
     const fieldset = document.createElement("fieldset");
@@ -151,7 +144,7 @@ const groupModal = (() => {
       deleteCompleted.classList.add("delete-completed-btn", "delete-btn", "focusable");
       deleteCompleted.textContent = "DELETE COMPLETED TASKS";
 
-      if (DOM.defaultGroups.indexOf(DOM.taskHeader.textContent) >= 0) {
+      if (_defaultGroups.indexOf(_taskHeader.textContent) >= 0) {
         nameLabel.style.opacity = "0.38";
         nameInput.setAttribute("disabled", "true");
         nameInput.style.opacity = "0.38";
@@ -175,12 +168,12 @@ const groupModal = (() => {
     DOM.modalBox.appendChild(form);
   };
 
-  DOM.groupOptionBtn.addEventListener("click", (e) => {
+  document.querySelector(".group-option-btn").addEventListener("click", (e) => {
     _render(e);
     generalModal.onOpen();
   });
 
-  DOM.addGroupBtn.addEventListener("click", (e) => {
+  document.querySelector(".add-group-btn").addEventListener("click", (e) => {
     _render(e);
     generalModal.onOpen();
   });

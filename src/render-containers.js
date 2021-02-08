@@ -3,22 +3,12 @@
 import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
-const DOM = (() => {
-  const customGroups = document.querySelector(".custom-groups-container");
-  const taskHeader = document.querySelector(".selected-group");
-  const tasksList = document.querySelector(".task-container");
-
-  return {
-    customGroups,
-    taskHeader,
-    tasksList
-  }
-})();
-
 const groupContainer = (() => {
+  const _customGroups = document.querySelector(".custom-groups-container");
+
   const _clear = () => {
-    while (DOM.customGroups.firstChild) {
-      DOM.customGroups.removeChild(DOM.customGroups.firstChild);
+    while (_customGroups.firstChild) {
+      _customGroups.removeChild(_customGroups.firstChild);
     };
   };
 
@@ -30,7 +20,7 @@ const groupContainer = (() => {
       button.setAttribute("aria-label", `Group name: ${group}`);
       button.classList.add("custom-group", "focusable", "group-btn");
       button.textContent = group;
-      DOM.customGroups.appendChild(button);
+      _customGroups.appendChild(button);
     });
   };
 
@@ -38,9 +28,12 @@ const groupContainer = (() => {
 })();
 
 const taskContainer = (() => {
+  const _taskHeader = document.querySelector(".selected-group");
+  const _tasksList = document.querySelector(".task-container");
+
   const _clear = () => {
-    while (DOM.tasksList.firstChild) {
-      DOM.tasksList.removeChild(DOM.tasksList.firstChild);
+    while (_tasksList.firstChild) {
+      _tasksList.removeChild(_tasksList.firstChild);
     };
   };
 
@@ -137,7 +130,7 @@ const taskContainer = (() => {
     taskItem.appendChild(nameField);
     taskItem.appendChild(dateField);
     taskItem.appendChild(details);
-    DOM.tasksList.appendChild(taskItem);
+    _tasksList.appendChild(taskItem);
   };
 
   const loadGroupTasks = (list, target) => {
@@ -159,15 +152,15 @@ const taskContainer = (() => {
         });
         break;
     };
-    if (DOM.tasksList.children.length === 0) {
+    if (_tasksList.children.length === 0) {
       const h2 = document.createElement("h2");
       h2.textContent = "No tasks for this group!";
-      DOM.tasksList.appendChild(h2);
+      _tasksList.appendChild(h2);
     };
   };
 
   const updateHeader = (target) => {
-    DOM.taskHeader.textContent = target.textContent;
+    _taskHeader.textContent = target.textContent;
   };
 
   return {
