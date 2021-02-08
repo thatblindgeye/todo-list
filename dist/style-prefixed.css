@@ -115,6 +115,11 @@ input[type="submit"] {
   outline-offset: 2px;
 }
 
+.blur {
+  -webkit-filter: blur(5px);
+          filter: blur(5px);
+}
+
 
 /* ========== MODALS ========== */
 .modal-container {

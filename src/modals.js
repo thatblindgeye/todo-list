@@ -65,7 +65,7 @@ const warningModal = (() => {
     heading.textContent = "This site uses minimal animation effects.";
 
     const para1 = document.createElement("p");
-    para1.textContent = "Effects include moving menus and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.";
+    para1.textContent = "Effects include moving menus on mobile devices and smooth scrolling. If you suffer from a vestibular disorder or otherwise prefer no animations, you can turn them off by clicking the first button below.";
 
     const para2 = document.createElement("p");
     para2.textContent= "You can later change this setting in the Display & Accessibility tab at the top of the page.";
