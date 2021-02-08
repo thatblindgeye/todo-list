@@ -5,13 +5,11 @@ const DOM = (() => {
         document.querySelector("#accessibility-container");
   const animationSwitch = 
         document.querySelector("#animation-switch");
-  const githubLogo = document.querySelector("#lower-nav img");
   const themeSwitch = document.querySelector("#theme-switch");
 
   return {
     accessibilityContainer,
     animationSwitch,
-    githubLogo,
     themeSwitch
   }
 })();
@@ -31,6 +29,9 @@ const settings = (() => {
 })();
 
 const displayOptions = (() => {
+  const _signInBtn = document.querySelector(".sign-in-btn");
+  const _githubLogo = document.querySelector("#lower-nav img");
+
   const _onLoad = () => {
     if (localStorage.getItem("theme") === "light") {
       _lightTheme();
@@ -52,16 +53,20 @@ const displayOptions = (() => {
     DOM.themeSwitch.setAttribute("aria-checked", "false");
     document.documentElement.setAttribute("theme", "dark");
     DOM.themeSwitch.style.backgroundPosition = "center bottom -0.8rem";
-    DOM.githubLogo.setAttribute("src",
+    _githubLogo.setAttribute("src",
         "assets/images/logos/GitHub-Mark-Light-32px.png");
+    // _signInBtn.style.backgroundImage = 
+    //     `url("assets/images/logos/Google-Dark.png")`;
   };
 
   const _lightTheme = () => {
     DOM.themeSwitch.setAttribute("aria-checked", "true");
     document.documentElement.setAttribute("theme", "light");
     DOM.themeSwitch.style.backgroundPosition = "center top 2px";
-    DOM.githubLogo.setAttribute("src",
+    _githubLogo.setAttribute("src",
     "assets/images/logos/GitHub-Mark-32px.png");
+    // _signInBtn.style.backgroundImage = 
+    //     `url("assets/images/logos/Google-Light.png")`;
   };
 
   DOM.themeSwitch.addEventListener("click", _toggleTheme);

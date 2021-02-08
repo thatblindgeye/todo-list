@@ -27,7 +27,7 @@ const toDo = (() => {
           priority: "Normal",
           dueDate: "",
           notes:
-            "Let the pans soak, put the plates in the dishwasher, wash the mugs by hand.\n\nWash pans after 30 minutes soaking.",
+            "Let the pans soak, put the plates in the dishwasher, wash the mugs by hand.\n\nWash the pans after 30 minutes of soaking.",
         },
         {
           taskName: "Bring Muffin to vet",
