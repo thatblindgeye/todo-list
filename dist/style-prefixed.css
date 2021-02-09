@@ -98,7 +98,10 @@
 
 body {
   min-height: 100vh;
-  background: var(--background-base);
+  background: url(assets/images/backgrounds/planner-bg.jpg) center no-repeat;
+  background-size: cover;
+  background-color: var(--background-base);
+  background-blend-mode:soft-light;
   letter-spacing: 1px;
 }
 

@@ -1,7 +1,7 @@
 # Will-Do
 
 ## Description
-A to-do list app that helps ensure that you "Will-Do" any task you need to get done.
+A to-do list app that helps ensure that you "Will-Do" any task you need to get done. Start using <a href="https://thatblindgeye.github.io/todo-list/">Will-Do</a> today.
 
 ## Features
 1. Dark and light themes
