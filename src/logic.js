@@ -358,7 +358,7 @@ const modalEvents = (() => {
           tasks.update();
           toDo.saveToLocal();
           generalModal.onClose();
-          taskContainer.loadGroupTasks(toDo.masterList, DOM.taskHeader);
+          taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
         };
         break;
       default:
