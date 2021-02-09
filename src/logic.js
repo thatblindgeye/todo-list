@@ -60,12 +60,12 @@ const toDo = (() => {
     {
       Example: [
         {
-          taskName: "Do the dishes",
+          taskName: "Buy groceries",
           completed: false,
           priority: "Normal",
           dueDate: "",
           notes:
-            "Let the pans soak, put the plates in the dishwasher, wash the mugs by hand.\n\nWash the pans after 30 minutes of soaking.",
+            "-Butter\n-Milk\n-Eggs",
         },
         {
           taskName: "Bring Muffin to vet",
