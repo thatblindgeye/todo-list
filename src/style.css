@@ -608,8 +608,9 @@ input[type="submit"]:hover {
   background-color: transparent;
   color: var(--primary-text);
   border: none;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: bold;
+  line-height: 0.9;
 }
 
 .task-name:hover {
@@ -618,6 +619,7 @@ input[type="submit"]:hover {
 
 .task-date {
   grid-area: date;
+  line-height: 1.25;
 }
 
 .task-details {
@@ -638,7 +640,7 @@ input[type="submit"]:hover {
 .task-details p {
   width: 100%;
   margin-bottom: 50px;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-style: italic;
   line-height: 1.5;
 }
