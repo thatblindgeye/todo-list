@@ -204,6 +204,8 @@ const taskContainer = (() => {
 
   const updateHeader = (target) => {
     _taskHeader.textContent = target.textContent;
+    document.querySelector(".group-option-btn").setAttribute("aria-label", 
+        `View options for group: ${target.textContent}`);
   };
 
   return {

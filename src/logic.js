@@ -17,6 +17,44 @@ const DOM = (() => {
   }
 })();
 
+const menuVisibility = (() => {
+  const _menuContainer = document.querySelector("#main-nav");
+  const _menuOpenButton = document.querySelector(".menu-button");
+  const _menuCloseButton = document.querySelector(".menu-close-button");
+
+  const _onScreenSize = () => {
+    if (document.documentElement.scrollWidth > 763) {
+      _menuContainer.style.visibility = "visible";
+      _menuContainer.style.left = "0";
+    } else {
+      _menuContainer.style.visibility = "hidden";
+      _menuContainer.style.left = "-800px";
+    };
+  };
+  
+  window.addEventListener("resize", _onScreenSize);
+  window.addEventListener("load", _onScreenSize);
+
+  const toggleMenu = (e) => {
+    if (_menuContainer.style.visibility === "hidden") {
+      _menuContainer.style.visibility = "visible";
+      _menuContainer.style.left = "0";
+      _menuCloseButton.focus();
+    } else {
+      _menuContainer.style.left = "-800px";
+      setTimeout(() => {
+        _menuContainer.style.visibility = "hidden"
+      }, 600);
+      _menuOpenButton.focus();
+    };
+  };
+
+  _menuOpenButton.addEventListener("click", toggleMenu);
+  _menuCloseButton.addEventListener("click", toggleMenu);
+
+  return {toggleMenu}
+})();
+
 const toDo = (() => {
   const masterList = JSON.parse(localStorage.getItem("toDo-list")) || 
     {
@@ -61,6 +99,16 @@ const groups = (() => {
     });
   };
 
+  const _clickOnGroup = (e) => {
+    _setInactive();
+    setActive(e.target);
+    taskContainer.updateHeader(e.target);
+    taskContainer.loadGroupTasks(toDo.masterList, e.target);
+    if (document.documentElement.scrollWidth <= 763) {
+      menuVisibility.toggleMenu();
+    };
+  };
+
   const create = (name) => {
     toDo.masterList[name] = [];
   };
@@ -89,10 +137,14 @@ const groups = (() => {
 
   document.getElementById("main-nav").addEventListener("click", (e) => {
     if (e.target.classList.contains("group-item")) {
-      _setInactive();
-      setActive(e.target);
-      taskContainer.updateHeader(e.target);
-      taskContainer.loadGroupTasks(toDo.masterList, e.target);
+      _clickOnGroup(e);
+    };
+  });
+
+  document.getElementById("main-nav").addEventListener("keydown", (e) => {
+    if (e.key === " " && e.target.classList.contains("group-item")) {
+      e.preventDefault();
+      _clickOnGroup(e);
     };
   });
 
