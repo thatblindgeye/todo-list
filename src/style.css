@@ -425,10 +425,8 @@ input[type="submit"]:hover {
 }
 
 .add-task-btn {
-  position: absolute;
   /* top: 7rem; */
-  top: 3rem;
-  left: 10px;
+  margin: 3rem 0 0 10px;
   padding: 8px 10px;
   border-radius: 10px;
   background-color: var(--color-primary-var);
@@ -500,7 +498,7 @@ input[type="submit"]:hover {
 
 .default-groups-container {
   /* margin: 10rem 0 30px; */
-  margin: 7rem 0 30px;
+  margin: 1rem 0 2rem;
 }
 
 .custom-groups-container {
@@ -508,7 +506,8 @@ input[type="submit"]:hover {
 }
 
 .add-group-btn {
-  padding: 10px;
+  margin-left: 10px;
+  padding: 10px 0;
   font-size: 1.3rem;
 }
 
@@ -761,11 +760,6 @@ input[type="submit"]:hover {
   .menu-button,
   .menu-close-button {
     display: none;
-  }
-
-  .add-task-btn {
-    z-index: 1;
-    position: fixed;
   }
 
   #main-nav {
