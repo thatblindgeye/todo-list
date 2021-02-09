@@ -44,3 +44,7 @@ const menuVisibility = (() => {
   menuOpenButton.addEventListener("click", _toggleMenu);
   menuCloseButton.addEventListener("click", _toggleMenu);
 })();
+
+window.addEventListener("click", (e) => {
+  e.target.blur();
+});

@@ -2,6 +2,7 @@
 
 import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import { de } from "date-fns/locale";
 
 const groupContainer = (() => {
   const _customGroups = document.querySelector(".custom-groups-container");
@@ -15,12 +16,12 @@ const groupContainer = (() => {
   const render = (list) => {
     _clear();
     Object.keys(list).forEach(group => {
-      const button = document.createElement("button");
-      button.setAttribute("type", "button");
-      button.setAttribute("aria-label", `Group name: ${group}`);
-      button.classList.add("custom-group", "focusable", "group-btn");
-      button.textContent = group;
-      _customGroups.appendChild(button);
+      const groupItem = document.createElement("li");
+      groupItem.setAttribute("tabindex", "0");
+      groupItem.setAttribute("aria-label", `Group name: ${group}`);
+      groupItem.classList.add("custom-group", "focusable", "group-item");
+      groupItem.textContent = group;
+      _customGroups.appendChild(groupItem);
     });
   };
 
@@ -76,12 +77,13 @@ const taskContainer = (() => {
     taskItem.className = "task-item";
 
     const priorityBox = document.createElement("span");
-    priorityBox.setAttribute("aria-label", `${task.priority} task`);
+    // priorityBox.setAttribute("aria-label", `${task.priority} task`);
     priorityBox.className = "task-priority"
     if (task.priority === "Important") {
       const icon = document.createElement("span");
       icon.className = "material-icons";
       icon.textContent = "priority_high";
+      icon.setAttribute("aria-label", `${task.priority} task`);
       priorityBox.appendChild(icon);
     };
 
@@ -89,7 +91,7 @@ const taskContainer = (() => {
     statusBox.setAttribute("role", "checkbox");
     statusBox.setAttribute("aria-checked", "false");
     statusBox.setAttribute("tabindex", "0");
-    statusBox.setAttribute("aria-label", task.taskName);
+    statusBox.setAttribute("aria-label", `Task: ${task.taskName}. Priority: ${task.priority}`);
     statusBox.classList.add("task-status", "focusable");
     if (task.completed) {
       statusBox.style.backgroundImage = 
@@ -195,7 +197,7 @@ const taskContainer = (() => {
     };
     if (_taskList.children.length === 0) {
       const h2 = document.createElement("h2");
-      h2.textContent = "No tasks for this group!";
+      h2.textContent = "Will-done! No tasks currently exist for this group.";
       _taskList.appendChild(h2);
     };
   };

@@ -44,7 +44,7 @@
   /* borders */
     --border-primary: rgb(240, 240, 240);
     --input-border: rgb(160, 160, 160);
-    --focus: 2px dotted rgb(224, 224, 224);
+    --focus: 2px solid rgb(224, 224, 224);
     --task-separator: 2px solid rgb(39, 39, 39);
     --button-border: rgb(100, 100, 100);
   /* misc */
@@ -77,7 +77,7 @@
   /* borders */
     --border-primary: rgb(18, 18, 18);
     --input-border: rgb(60, 60, 60);
-    --focus: 2px dotted rgb(30, 30, 30);
+    --focus: 2px solid rgb(30, 30, 30);
     --task-separator: 2px solid rgb(200, 200, 200);
     --button-border: 1px solid rgb(150, 150, 150);
   /* misc */
@@ -103,10 +103,11 @@ body {
 }
 
 button:hover,
-span[role="checkbox"],
-span[role="button"],
-div[role="switch"],
-input[type="submit"] {
+li:hover,
+span[role="checkbox"]:hover,
+span[role="button"]:hover,
+div[role="switch"]:hover,
+input[type="submit"]:hover {
   cursor: pointer;
 }
 
@@ -470,9 +471,12 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
-.group-btn,
+.group-item,
 .add-group-btn {
   width: 95%;
   margin: 5px 0;
@@ -486,8 +490,8 @@ input[type="submit"] {
   letter-spacing: 1px;
 }
 
-.groups-container button:hover,
-.groups-container button:focus,
+.groups-container li:hover,
+.groups-container li:focus,
 .add-group-btn:hover,
 .add-group-btn:focus,
 .active {
@@ -606,6 +610,7 @@ input[type="submit"] {
   color: var(--primary-text);
   border: none;
   font-size: 1.05rem;
+  font-weight: bold;
 }
 
 .task-name:hover {

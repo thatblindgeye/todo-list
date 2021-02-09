@@ -43,22 +43,22 @@
         <button type="button" class="menu-close-button close-btn animated focusable" aria-label="Close task groups menu"></button>
         <!-- <button type="button" class="sign-in-btn focusable secondary-btn" aria-label="Sign in with Google"></button> -->
         <button type="button" class="add-task-btn focusable">
-          <span class="material-icons">add</span>
+          <span class="material-icons" aria-label="">add</span>
           ADD TASK
         </button>
-        <div class="default-groups-container groups-container">
-          <button id="important" class="focusable default-group group-btn active" aria-label="Group name: important">Important</button>
-          <button id="next-7-days" class="focusable default-group group-btn" aria-label="Group name: Next seven days">Next 7 Days</button>
-          <button id="later" class="focusable default-group group-btn" aria-label="Group name: Later">Later</button>
-          <button id="eventually" class="focusable default-group group-btn" aria-label="Group name: Eventually">Eventually</button>
-        </div>
+        <ul class="default-groups-container groups-container">
+          <li id="important" class="focusable default-group group-item active" aria-label="Group name: important" tabindex="0">Important</li>
+          <li id="next-7-days" class="focusable default-group group-item" aria-label="Group name: Next seven days" tabindex="0">Next 7 Days</li>
+          <li id="later" class="focusable default-group group-item" aria-label="Group name: Later" tabindex="0">Later</li>
+          <li id="eventually" class="focusable default-group group-item" aria-label="Group name: Eventually" tabindex="0">Eventually</li>
+        </ul>
         <button type="button" class="add-group-btn focusable">
-          <span class="material-icons">add</span>
+          <span class="material-icons" aria-label="">add</span>
           ADD GROUP
         </button>
-        <div class="custom-groups-container groups-container">
+        <ul class="custom-groups-container groups-container">
           <!-- <button type="button" class="custom-group focusable group-btn" aria-label="Task group: Example">Example</button> -->
-        </div>
+        </ul>
       </nav>
     </header>
 

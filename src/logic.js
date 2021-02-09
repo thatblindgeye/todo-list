@@ -40,7 +40,7 @@ const toDo = (() => {
     };
 
   const saveToLocal = () => {
-    localStorage.setItem("toDo-list", JSON.stringify(list));
+    localStorage.setItem("toDo-list", JSON.stringify(masterList));
   };
 
   window.addEventListener("load", (e) => {
@@ -56,19 +56,18 @@ const toDo = (() => {
 
 const groups = (() => {
   const _setInactive = () => {
-    Array.from(document.getElementsByClassName("group-btn")).forEach(button => {
+    Array.from(document.getElementsByClassName("group-item")).forEach(button => {
       button.classList.remove("active");
     });
   };
 
   const create = (name) => {
     toDo.masterList[name] = [];
-    console.log(toDo.masterList);
   };
 
   const update = (oldName, newName) => {
-    delete Object.assign(toDo.masterList, {[newName]: toDo.masterList[oldName]})[oldName];
-    console.log(toDo.masterList);
+    delete Object.assign(toDo.masterList, 
+                        {[newName]: toDo.masterList[oldName]})[oldName];
   };
 
   const checkName = (name) => {
@@ -82,7 +81,6 @@ const groups = (() => {
 
   const remove = (name) => {
     delete toDo.masterList[name];
-    console.log(toDo.masterList);
   };
 
   const setActive = (target) => {
@@ -90,7 +88,7 @@ const groups = (() => {
   };
 
   document.getElementById("main-nav").addEventListener("click", (e) => {
-    if (e.target.classList.contains("group-btn")) {
+    if (e.target.classList.contains("group-item")) {
       _setInactive();
       setActive(e.target);
       taskContainer.updateHeader(e.target);
@@ -113,16 +111,17 @@ const tasks = (() => {
   const _changeStatus = (node) => {
     const groupData = node.dataset.group;
     const taskIndex = node.dataset.index;
-
-    if (node.children[1].getAttribute("style") === null) {
+    // node.children[1].getAttribute("style") === null
+    if (toDo.masterList[groupData][taskIndex].completed === false) {
       toDo.masterList[groupData][taskIndex].completed = true;
+      node.children[1].setAttribute("aria-checked", "true");
       node.children[1].style.backgroundImage = 
           "url(assets/images/icons/done-black-24dp.svg)";
     } else {
       toDo.masterList[groupData][taskIndex].completed = false;
+      node.children[1].setAttribute("aria-checked", "false");
       node.children[1].removeAttribute("style");
     };
-    console.log(toDo.masterList);
   };
 
   const _getTaskData = (node) => {
@@ -147,7 +146,7 @@ const tasks = (() => {
     switch (true) {
       case e.target.classList.contains("task-status"):
         _changeStatus(e.target.parentElement);
-        // toDo.saveToLocal();
+        toDo.saveToLocal();
         break;
       case e.target.classList.contains("task-name"):
         // toggle's task item's details section
@@ -164,7 +163,7 @@ const tasks = (() => {
           removeSingle(e.target.parentElement);
           taskContainer.loadGroupTasks(toDo.masterList, 
                                       document.querySelector(".active"));
-          // toDo.saveToLocal();
+          toDo.saveToLocal();
         };
         break;
       default:
@@ -206,7 +205,6 @@ const tasks = (() => {
   const removeSingle = (node) => {
     toDo.masterList[node.dataset.group].splice(node.dataset.index, 1);
     node.remove();
-    console.log(toDo.masterList);
   };
 
   const removeCompleted = (group) => {
@@ -274,31 +272,31 @@ const tasks = (() => {
 const modalEvents = (() => {
   DOM.modalBox.addEventListener("click", (e) => {
     const _activeGroup = document.querySelector(".active");
-    const nameInput = document.querySelector("#name-input");
-    const group = document.querySelector("#group-select");
+    const _nameInput = document.querySelector("#name-input");
+    const _group = document.querySelector("#group-select");
 
     switch (e.target) {
       case document.querySelector(".submit-group-btn"):
       case document.querySelector(".update-group-btn"):
         e.preventDefault();
-        if (groups.checkName(nameInput.value)) {
+        if (groups.checkName(_nameInput.value)) {
           alert("Group name cannot be blank and cannot already be taken." + 
                 "\n\nPlease enter a new name.");
           return;
         } else {
           if (e.target.classList.contains("submit-group-btn")) {
-            groups.create(nameInput.value);
+            groups.create(_nameInput.value);
             groupContainer.render(toDo.masterList);
             groups.setActive(DOM.activeOnLoad);
             taskContainer.loadGroupTasks(toDo.masterList, DOM.activeOnLoad);
             taskContainer.updateHeader(DOM.activeOnLoad);
           } else {
-            groups.update(DOM.taskHeader.textContent, nameInput.value);
-            _activeGroup.textContent = nameInput.value;
+            groups.update(DOM.taskHeader.textContent, _nameInput.value);
+            _activeGroup.textContent = _nameInput.value;
             taskContainer.updateHeader(_activeGroup);
           };
         };
-          // toDo.saveToLocal();
+          toDo.saveToLocal();
           generalModal.onClose();
         break;
       case document.querySelector(".delete-group-btn"):
@@ -306,7 +304,7 @@ const modalEvents = (() => {
             `group, along with any tasks within it.\n\nPlease click "OK" ` + 
             `to confirm deletion.`)) {
           groups.remove(DOM.taskHeader.textContent);
-          // toDo.saveToLocal(); 
+          toDo.saveToLocal(); 
           generalModal.onClose();
           groupContainer.render(toDo.masterList);
           groups.setActive(DOM.activeOnLoad);
@@ -317,32 +315,31 @@ const modalEvents = (() => {
       case document.querySelector(".delete-completed-btn"):
         if (tasks.confirmMassRemove()) {
           tasks.removeCompleted(DOM.taskHeader.textContent);
-          // toDo.saveToLocal();
+          toDo.saveToLocal();
           generalModal.onClose();
           taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
-          console.log(toDo.masterList);
         };
         break;
       case document.querySelector(".add-single-btn"):
       case document.querySelector(".add-many-btn"):
         e.preventDefault();
-        if (tasks.checkName(nameInput.value)) {
+        if (tasks.checkName(_nameInput.value)) {
           alert("Task name cannot be blank.\n\nPlease enter a new name.");
           return;
         } else {
           const newTask = tasks.create(
-            nameInput.value,
+            _nameInput.value,
             document.querySelector("#priority-select").value,
             document.querySelector("#date-select").value,
             document.querySelector("#notes-input").value,
             false
           );
-          toDo.masterList[group.value].push(newTask);
-          // toDo.saveToLocal();
+          toDo.masterList[_group.value].push(newTask);
+          toDo.saveToLocal();
           if (e.target.classList.contains("add-many-btn")) {
-            nameInput.focus();
-            nameInput.value = "";
-            group.selectedIndex = 0;
+            _nameInput.focus();
+            _nameInput.value = "";
+            _group.selectedIndex = 0;
             document.querySelector("#priority-select").selectedIndex = 0;
             document.querySelector("#date-select").value = "";
             document.querySelector("#notes-input").value = "";
@@ -350,20 +347,18 @@ const modalEvents = (() => {
             generalModal.onClose();
           };
           taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
-          console.log(toDo.masterList);
         };
         break;
       case document.querySelector(".update-task-btn"):
         e.preventDefault();
-        if (tasks.checkName(nameInput.value)) {
+        if (tasks.checkName(_nameInput.value)) {
           alert("Task name cannot be blank.\n\nPlease enter a new name.");
           return;
         } else {
           tasks.update();
-          // toDo.saveToLocal();
+          toDo.saveToLocal();
           generalModal.onClose();
           taskContainer.loadGroupTasks(toDo.masterList, DOM.taskHeader);
-          console.log(toDo.masterList);
         };
         break;
       default:
