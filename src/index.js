@@ -4,5 +4,4 @@ import './style.css';
 import { accessibilityOptions, displayOptions } from "./site-settings";
 import { groupModal, warningModal } from "./modals";
 import { groups, modalEvents, tasks, toDo } from "./logic";
-
-console.log(toDo.masterList);
+import { changeState } from "./firebase-logic";

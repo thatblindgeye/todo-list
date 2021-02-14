@@ -55,8 +55,8 @@ const displayOptions = (() => {
     DOM.themeSwitch.style.backgroundPosition = "center bottom -0.8rem";
     _githubLogo.setAttribute("src",
         "assets/images/logos/GitHub-Mark-Light-32px.png");
-    // _signInBtn.style.backgroundImage = 
-    //     `url("assets/images/logos/Google-Dark.png")`;
+    _signInBtn.style.backgroundImage = 
+        `url("assets/images/logos/Google-Dark.png")`;
   };
 
   const _lightTheme = () => {
@@ -65,8 +65,8 @@ const displayOptions = (() => {
     DOM.themeSwitch.style.backgroundPosition = "center top 2px";
     _githubLogo.setAttribute("src",
     "assets/images/logos/GitHub-Mark-32px.png");
-    // _signInBtn.style.backgroundImage = 
-    //     `url("assets/images/logos/Google-Light.png")`;
+    _signInBtn.style.backgroundImage = 
+        `url("assets/images/logos/Google-Light.png")`;
   };
 
   DOM.themeSwitch.addEventListener("click", _toggleTheme);

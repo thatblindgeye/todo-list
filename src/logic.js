@@ -1,7 +1,9 @@
 "use strict";
 
+import { changeState } from "./firebase-logic";
 import { generalModal, taskModal } from "./modals";
 import { groupContainer, taskContainer } from "./render-containers";
+
 
 const DOM = (() => {
   const activeOnLoad = document.getElementById("important");
@@ -29,7 +31,7 @@ const menuVisibility = (() => {
     } else {
       _menuContainer.style.visibility = "hidden";
       _menuContainer.style.left = "-800px";
-    };
+    }
   };
   
   window.addEventListener("resize", _onScreenSize);
@@ -46,7 +48,7 @@ const menuVisibility = (() => {
         _menuContainer.style.visibility = "hidden"
       }, 600);
       _menuOpenButton.focus();
-    };
+    }
   };
 
   _menuOpenButton.addEventListener("click", toggleMenu);
@@ -77,7 +79,7 @@ const toDo = (() => {
       ],
     };
 
-  const saveToLocal = () => {
+  const saveList = () => {
     localStorage.setItem("toDo-list", JSON.stringify(masterList));
   };
 
@@ -88,7 +90,7 @@ const toDo = (() => {
 
   return { 
     masterList,
-    saveToLocal
+    saveList
   }
 })();
 
@@ -106,7 +108,7 @@ const groups = (() => {
     taskContainer.loadGroupTasks(toDo.masterList, e.target);
     if (document.documentElement.scrollWidth <= 763) {
       menuVisibility.toggleMenu();
-    };
+    }
   };
 
   const create = (name) => {
@@ -138,14 +140,14 @@ const groups = (() => {
   document.getElementById("main-nav").addEventListener("click", (e) => {
     if (e.target.classList.contains("group-item")) {
       _clickOnGroup(e);
-    };
+    }
   });
 
   document.getElementById("main-nav").addEventListener("keydown", (e) => {
     if (e.key === " " && e.target.classList.contains("group-item")) {
       e.preventDefault();
       _clickOnGroup(e);
-    };
+    }
   });
 
   return {
@@ -173,7 +175,7 @@ const tasks = (() => {
       toDo.masterList[groupData][taskIndex].completed = false;
       node.children[1].setAttribute("aria-checked", "false");
       node.children[1].removeAttribute("style");
-    };
+    }
   };
 
   const _getTaskData = (node) => {
@@ -198,7 +200,7 @@ const tasks = (() => {
     switch (true) {
       case e.target.classList.contains("task-status"):
         _changeStatus(e.target.parentElement);
-        toDo.saveToLocal();
+        toDo.saveList();
         break;
       case e.target.classList.contains("task-name"):
         // toggle's task item's details section
@@ -215,12 +217,12 @@ const tasks = (() => {
           removeSingle(e.target.parentElement);
           taskContainer.loadGroupTasks(toDo.masterList, 
                                       document.querySelector(".active"));
-          toDo.saveToLocal();
-        };
+          toDo.saveList();
+        }
         break;
       default:
         return;
-    };
+    }
   };
 
   const create = (taskName, priority, dueDate, notes, completed) => {
@@ -266,17 +268,15 @@ const tasks = (() => {
         for (let i = (item.length - 1); i >= 0; i--) {
           if (item[i].completed === true) {
             toDo.masterList[keyArray[index]].splice(i, 1);
-          };
-        };
+          }
+        }
       });
     } else {
-      toDo.masterList[group].forEach((item) => {
-        for (let i = (toDo.masterList[group].length - 1); i >= 0 ; i--) {
-          if (item.completed === true) {
-            toDo.masterList[group].splice(i, 1)
-          };
+      for (let i = (toDo.masterList[group].length - 1); i >= 0 ; i--) {
+        if (toDo.masterList[group][i].completed === true) {
+          toDo.masterList[group].splice(i, 1)
         };
-      });
+      };
     };
   };
 
@@ -288,7 +288,7 @@ const tasks = (() => {
       return confirm(`This will delete all completed tasks in the ` + 
                     `${DOM.taskHeader.textContent} group.\n\nPlease click ` + 
                     `"OK" to confirm deletion.`);
-    };
+    }
   };
 
   document.querySelector(".add-task-btn").addEventListener("click", (e) => {
@@ -298,7 +298,7 @@ const tasks = (() => {
     } else {
       taskModal.render(e, Object.keys(toDo.masterList));
       generalModal.onOpen();
-    };
+    }
   });
 
   _taskList.addEventListener("click", _resolveTaskEvent);
@@ -308,7 +308,7 @@ const tasks = (() => {
         e.target.classList.contains("task-name"))) {
       e.preventDefault();
       _resolveTaskEvent(e);
-    };
+    }
   });
 
   return {
@@ -346,9 +346,9 @@ const modalEvents = (() => {
             groups.update(DOM.taskHeader.textContent, _nameInput.value);
             _activeGroup.textContent = _nameInput.value;
             taskContainer.updateHeader(_activeGroup);
-          };
-        };
-          toDo.saveToLocal();
+          }
+        }
+          toDo.saveList();
           generalModal.onClose();
         break;
       case document.querySelector(".delete-group-btn"):
@@ -356,21 +356,21 @@ const modalEvents = (() => {
             `group, along with any tasks within it.\n\nPlease click "OK" ` + 
             `to confirm deletion.`)) {
           groups.remove(DOM.taskHeader.textContent);
-          toDo.saveToLocal(); 
+          toDo.saveList(); 
           generalModal.onClose();
           groupContainer.render(toDo.masterList);
           groups.setActive(DOM.activeOnLoad);
           taskContainer.loadGroupTasks(toDo.masterList, DOM.activeOnLoad);
           taskContainer.updateHeader(DOM.activeOnLoad);
-        };
+        }
         break;
       case document.querySelector(".delete-completed-btn"):
         if (tasks.confirmMassRemove()) {
           tasks.removeCompleted(DOM.taskHeader.textContent);
-          toDo.saveToLocal();
+          toDo.saveList();
           generalModal.onClose();
           taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
-        };
+        }
         break;
       case document.querySelector(".add-single-btn"):
       case document.querySelector(".add-many-btn"):
@@ -387,7 +387,7 @@ const modalEvents = (() => {
             false
           );
           toDo.masterList[_group.value].push(newTask);
-          toDo.saveToLocal();
+          toDo.saveList();
           if (e.target.classList.contains("add-many-btn")) {
             _nameInput.focus();
             _nameInput.value = "";
@@ -397,9 +397,9 @@ const modalEvents = (() => {
             document.querySelector("#notes-input").value = "";
           } else {
             generalModal.onClose();
-          };
+          }
           taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
-        };
+        }
         break;
       case document.querySelector(".update-task-btn"):
         e.preventDefault();
@@ -408,14 +408,14 @@ const modalEvents = (() => {
           return;
         } else {
           tasks.update();
-          toDo.saveToLocal();
+          toDo.saveList();
           generalModal.onClose();
           taskContainer.loadGroupTasks(toDo.masterList, _activeGroup);
-        };
+        }
         break;
       default:
         return;
-    };
+    }
   });
 })();
 
