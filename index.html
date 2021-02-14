@@ -42,7 +42,8 @@
       <button type="button" class="menu-button focusable" aria-label="Open task groups menu"></button>
       <nav id="main-nav" class="animated">
         <button type="button" class="menu-close-button close-btn animated focusable" aria-label="Close task groups menu"></button>
-        <!-- <button type="button" class="sign-in-btn focusable secondary-btn" aria-label="Sign in with Google"></button> -->
+        <button type="button" class="sign-in-btn focusable" aria-label="Sign in with Google"></button>
+        <button type="button" class="sign-out-btn focusable" aria-label="Sign out"></button>
         <button type="button" class="add-task-btn focusable">
           <span class="material-icons" aria-label="">add</span>
           ADD TASK
@@ -58,7 +59,6 @@
           ADD GROUP
         </button>
         <ul class="custom-groups-container groups-container">
-          <!-- <button type="button" class="custom-group focusable group-btn" aria-label="Task group: Example">Example</button> -->
         </ul>
       </nav>
     </header>
@@ -81,6 +81,32 @@
         </a>
       </nav>
     </footer>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBC3zlqrQjKaUggA48_R2L720m1BqA_GBM",
+    authDomain: "will-do-42f43.firebaseapp.com",
+    databaseURL: "https://will-do-42f43-default-rtdb.firebaseio.com",
+    projectId: "will-do-42f43",
+    storageBucket: "will-do-42f43.appspot.com",
+    messagingSenderId: "42107638452",
+    appId: "1:42107638452:web:5b0aac7ce63d56796b3de1",
+    measurementId: "G-3DPCJR08V4"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
     <script src="app.js"></script>
   </body>
 </html>
